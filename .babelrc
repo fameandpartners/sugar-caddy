@@ -1,6 +1,7 @@
 {
   "passPerPreset": true,
   "plugins": [
+    "add-module-exports",
     "transform-runtime"
   ],
   "presets": [

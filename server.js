@@ -5,8 +5,6 @@ require('ignore-styles');
 const http = require('http');
 const https = require('https');
 const Koa = require('koa');
-const favicon = require('koa-favicon');
-const koaManifestRev = require('koa-manifest-rev');
 const serveStatic = require('@ladjs/koa-better-static');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
@@ -25,11 +23,12 @@ const Logger = require('@ladjs/logger');
 // const Mongoose = require('@ladjs/mongoose');
 const Graceful = require('@ladjs/graceful');
 
-const config = require('./config');
+const config = require('./config/environment-config.js');
 const helpers = require('./helpers');
 
 // React
-const reactRouter = require('./server/middlewares/react-router');
+const reactRouter = require('./server/middlewares/react-router.js');
+
 const AppLayout = require('./src/js/containers/AppLayout.js');
 
 // Frontend
@@ -51,15 +50,9 @@ app.on('log', logger.log);
 // compress/gzip
 app.use(compress());
 
-// favicons
-app.use(favicon(config.favicon));
-
 // serve static assets
 // TODO: <https://github.com/tunnckoCore/koa-better-serve/issues/13>
 app.use(serveStatic(config.buildDir, config.serveStatic));
-
-// koa-manifest-rev
-app.use(koaManifestRev(config.koaManifestRev));
 
 // override koa's undocumented error handler
 app.context.onerror = errorHandler;
@@ -90,20 +83,13 @@ app.use(helpers.contextHelpers);
 // 404 handler
 app.use(koa404Handler);
 
-// csrf (with added localization support)
-app.use((ctx, next) => {
-  // TODO: add cookies key until koa-better-error-handler issue is resolved
-  // <https://github.com/koajs/generic-session/pull/95#issuecomment-246308544>
-  ctx.state.cookiesKey = config.cookiesKey;
-  return next();
-});
 
 // configure timeout
 app.use(async (ctx, next) => {
   try {
     const timeout = new Timeout({
       ms: config.webRequestTimeoutMs,
-      message: config.phrases.REQUEST_TIMED_OUT,
+      message: 'Oh No! Timeout',
     });
     await timeout.middleware(ctx, next);
   } catch (err) {
