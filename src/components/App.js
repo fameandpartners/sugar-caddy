@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { fetchHierarchy } from 'actions/hierarchy';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
 import Hierarchy from './Hierarchy';
 import ComponentDrawer from './ComponentDrawer';
 import ModeButton from './ModeButton';
 
 class App extends Component {
+  static propTypes = {
+    hierarchy: PropTypes.instanceOf(Immutable.Map).isRequired,
+    fetchHierarchy: PropTypes.func.isRequired,
+  };
+
   static childContextTypes = {
     hierarchy: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
@@ -36,6 +44,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    this.props.fetchHierarchy();
     fetch('https://sugar-caddy-dev.firebaseio.com/.json')
       .then(text => text.json())
       .then(response => this.setState(response));
@@ -85,6 +94,7 @@ class App extends Component {
 
   render() {
     const { components, currentId, mode } = this.state;
+    console.log('hierarchy', this.props.hierarchy.toJS());
     return (
       <div className="App">
         <div className="mt-6 ml-8">
@@ -100,4 +110,6 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(state => ({ hierarchy: state.hierarchy }), {
+  fetchHierarchy,
+})(App);

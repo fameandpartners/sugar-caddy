@@ -8,8 +8,8 @@ const propTypes = {
 
 const HierarchyLevel = ({ level }) => (
   <div className="text-left mb-6">
-    <div className="text-lg font-semibold">{level.name}</div>
-    <CustomizationLane order={level.order} levelId={level.id} />
+    <div className="text-lg font-semibold">{level.get('name')}</div>
+    <CustomizationLane order={level.get('order')} levelId={level.get('id')} />
   </div>
 );
 

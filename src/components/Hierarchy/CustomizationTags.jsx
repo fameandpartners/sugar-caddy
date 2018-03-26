@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 
 const propTypes = {
-  tags: PropTypes.array,
+  tags: PropTypes.instanceOf(Immutable.List),
 };
 
 const defaultProps = {
-  tags: [],
+  tags: Immutable.List(),
 };
 
 const CustomizationTags = ({ tags }) => (

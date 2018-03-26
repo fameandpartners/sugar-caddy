@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import intersection from 'lodash/intersection';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
 import Customization from './Customization';
 
 const propTypes = {
   levelId: PropTypes.string.isRequired,
   order: PropTypes.number.isRequired,
+  hierarchy: PropTypes.instanceOf(Immutable.Map).isRequired,
 };
 
 const contextTypes = {
@@ -15,17 +18,18 @@ const contextTypes = {
 };
 
 const CustomizationLane = (
-  { levelId, order },
+  { levelId, order, hierarchy },
   { mode, components, currentPath },
 ) => {
-  const customizations = Object.keys(components)
-    .map(key => components[key])
-    .filter(item => item.levelId === levelId);
+  const customizations = hierarchy.getIn(['data', 'components']).toList()
+    .filter(item => item.get('levelId') === levelId);
   const currentTags =
     currentPath &&
     currentPath
       .slice(0, order - 1)
-      .reduce((acc, curr) => acc.concat(components[curr].tags || []), []);
+      .reduce((acc, curr) => acc.concat(components.getIn([curr, 'tags']).toArray() || []), []);
+
+  console.log('customizations', customizations.toJS());
 
   return (
     <div
@@ -33,14 +37,14 @@ const CustomizationLane = (
       className="flex bg-grey-light overflow-x-auto p-2"
     >
       {customizations.map((custom) => {
-        const tagIntersect = intersection(currentTags, custom.tags || []);
+        const tagIntersect = intersection(currentTags, (custom.get('tags') || Immutable.List()).toArray());
         const incompIntersect = intersection(
           currentTags,
-          custom.incompatibilities || [],
+          (custom.get('incompatibilities') || Immutable.List()).toArray(),
         );
         return (
           <Customization
-            key={custom.id}
+            key={custom.get('id')}
             order={order}
             customization={custom}
             disabled={
@@ -48,7 +52,7 @@ const CustomizationLane = (
               !!currentTags.length &&
               (!tagIntersect.length || incompIntersect.length)
             }
-            selected={mode === 'view' && custom.id === currentPath[order - 1]}
+            selected={mode === 'view' && custom.get('id') === currentPath[order - 1]}
           />
         );
       })}
@@ -59,4 +63,4 @@ const CustomizationLane = (
 CustomizationLane.propTypes = propTypes;
 CustomizationLane.contextTypes = contextTypes;
 
-export default CustomizationLane;
+export default connect(state => ({ hierarchy: state.hierarchy }))(CustomizationLane);

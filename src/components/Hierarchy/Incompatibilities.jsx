@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 
 const propTypes = {
-  incompatibilities: PropTypes.array,
+  incompatibilities: PropTypes.instanceOf(Immutable.List),
 };
 
 const defaultProps = {
-  incompatibilities: [],
+  incompatibilities: Immutable.List(),
 };
 
 const Incompatibilities = ({ incompatibilities }) => (
