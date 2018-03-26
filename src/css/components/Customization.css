@@ -1,0 +1,12 @@
+.Customization {
+  @apply .bg-white .p-3 .flex .flex-col .justify-around .items-center .border .border-grey-darkest .rounded-sm .mr-2 .outline-none;
+}
+
+.Customization--selected {
+  @apply .border-2 .border-blue;
+}
+
+.Customization--disabled {
+  @apply .cursor-not-allowed;
+  opacity: 0.2;
+}
