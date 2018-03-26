@@ -2,7 +2,9 @@ import {
   FETCH_HIERARCHY_LOADING,
   FETCH_HIERARCHY_FAILURE,
   FETCH_HIERARCHY_SUCCESS,
-  SET_HIERARCHY_MODE,
+  TOGGLE_HIERARCHY_MODE,
+  UPDATE_CURRENT_PATH,
+  SET_CURRENT_ID,
 } from 'constants/hierarchy';
 import fetch from 'utils/fetch';
 
@@ -36,7 +38,17 @@ export function fetchHierarchy() {
   };
 }
 
-export const setMode = payload => ({ type: SET_HIERARCHY_MODE, payload });
+export const toggleMode = payload => ({ type: TOGGLE_HIERARCHY_MODE, payload });
+
+export const updateCurrentPath = payload => ({
+  type: UPDATE_CURRENT_PATH,
+  payload,
+});
+
+export const setCurrentId = payload => ({
+  type: SET_CURRENT_ID,
+  payload,
+});
 
 export default {
   fetchHierarchy,

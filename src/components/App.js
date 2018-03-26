@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fetchHierarchy } from 'actions/hierarchy';
+import { fetchHierarchy, updateCurrentPath, toggleMode } from 'actions/hierarchy';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Hierarchy from './Hierarchy';
@@ -11,6 +11,7 @@ class App extends Component {
   static propTypes = {
     hierarchy: PropTypes.instanceOf(Immutable.Map).isRequired,
     fetchHierarchy: PropTypes.func.isRequired,
+    toggleMode: PropTypes.func.isRequired,
   };
 
   static childContextTypes = {
@@ -71,38 +72,17 @@ class App extends Component {
     });
   };
 
-  toggleMode = () =>
-    this.setState(state => ({ mode: state.mode === 'view' ? 'edit' : 'view' }));
-
-  selectCustomization = (customizationId, order) => {
-    const { mode, currentPath } = this.state;
-    if (mode === 'view') {
-      const currentIndex = currentPath.indexOf(customizationId);
-      if (currentIndex === -1 && order <= currentPath.length + 1) {
-        const newPath = currentPath.slice(0, order - 1).concat(customizationId);
-        this.setState({ currentPath: newPath });
-      } else {
-        const newPath = currentPath.slice(0, order - 1);
-        this.setState({ currentPath: newPath });
-      }
-    } else {
-      this.toggleDrawer(customizationId);
-    }
-  };
-
-  toggleDrawer = (currentId = '') => this.setState({ currentId });
-
   render() {
     const { components, currentId, mode } = this.state;
-    console.log('hierarchy', this.props.hierarchy.toJS());
+    const { hierarchy } = this.props;
     return (
       <div className="App">
         <div className="mt-6 ml-8">
-          <ModeButton mode={mode} onClick={this.toggleMode} />
+          <ModeButton mode={hierarchy.get('mode')} onClick={this.props.toggleMode} />
         </div>
         <Hierarchy />
         <ComponentDrawer
-          open={!!currentId}
+          open={!!hierarchy.get('currentId')}
           customization={components[currentId]}
         />
       </div>
@@ -112,4 +92,5 @@ class App extends Component {
 
 export default connect(state => ({ hierarchy: state.hierarchy }), {
   fetchHierarchy,
+  toggleMode,
 })(App);

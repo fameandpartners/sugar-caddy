@@ -13,23 +13,19 @@ const propTypes = {
 
 const contextTypes = {
   mode: PropTypes.string.isRequired,
-  components: PropTypes.object.isRequired,
-  currentPath: PropTypes.array.isRequired,
 };
 
 const CustomizationLane = (
   { levelId, order, hierarchy },
-  { mode, components, currentPath },
+  { mode },
 ) => {
   const customizations = hierarchy.getIn(['data', 'components']).toList()
     .filter(item => item.get('levelId') === levelId);
+  const currentPath = hierarchy.get('currentPath');
   const currentTags =
-    currentPath &&
     currentPath
       .slice(0, order - 1)
-      .reduce((acc, curr) => acc.concat(components.getIn([curr, 'tags']).toArray() || []), []);
-
-  console.log('customizations', customizations.toJS());
+      .reduce((acc, curr) => acc.concat(hierarchy.getIn(['data', 'components', curr, 'tags']).toArray() || []), []);
 
   return (
     <div
@@ -47,12 +43,13 @@ const CustomizationLane = (
             key={custom.get('id')}
             order={order}
             customization={custom}
+            mode={hierarchy.get('mode')}
             disabled={
               mode === 'view' &&
               !!currentTags.length &&
               (!tagIntersect.length || incompIntersect.length)
             }
-            selected={mode === 'view' && custom.get('id') === currentPath[order - 1]}
+            selected={mode === 'view' && custom.get('id') === currentPath.get(order - 1)}
           />
         );
       })}
