@@ -23,6 +23,7 @@
     "import/no-named-as-default-member": 0,
     "no-else-return": 0,
     "stroustrup": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
   },
   "settings": {
     "import/resolver": {
