@@ -1,47 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { reset } from 'redux-form';
+import Immutable from 'immutable';
 import ComponentDrawerForm from './ComponentDrawerForm';
 
 const propTypes = {
   open: PropTypes.bool.isRequired,
   customization: PropTypes.object,
   resetForm: PropTypes.func.isRequired,
+  setCurrentId: PropTypes.func.isRequired,
+  updateComponent: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   customization: {},
 };
 
-const contextTypes = {
-  toggleDrawer: PropTypes.func.isRequired,
-  updateComponent: PropTypes.func.isRequired,
-};
-
-const ComponentDrawer = (
-  { open, customization, resetForm },
-  { toggleDrawer, updateComponent },
-) => {
+const ComponentDrawer = ({
+  open,
+  customization,
+  resetForm,
+  setCurrentId,
+  updateComponent,
+}) => {
   if (!open) return <div />;
   return (
     <div id="tag-drawer" className="bg-grey h-48 fixed pin-l pin-r pin-b">
       <div className="flex h-full p-8">
-        {customization.image ? (
+        {customization.get('image') ? (
           <img
             alt="Customization"
             className="w-32 h-32 bg-white mr-8"
             style={{ objectFit: 'contain' }}
-            src={customization.image}
+            src={customization.get('image')}
           />
         ) : (
           <div className="w-32 h-32 bg-white mr-8" />
         )}
         <ComponentDrawerForm
           initialValues={{
-            name: customization.name,
-            tags: (customization.tags || []).concat(''),
-            incompatibilities: (customization.incompatibilities || []).concat(''),
+            name: customization.get('name'),
+            tags: (customization.get('tags') || Immutable.List())
+              .toArray()
+              .concat(''),
+            incompatibilities: (
+              customization.get('incompatibilities') || Immutable.List()
+            )
+              .toArray()
+              .concat(''),
           }}
           onSubmit={(data) => {
             const tags = data.tags
@@ -55,8 +60,8 @@ const ComponentDrawer = (
               incompatibilities,
             });
 
-            updateComponent(customization.id, update);
-            toggleDrawer();
+            updateComponent(customization.get('id'), update);
+            setCurrentId();
             resetForm();
           }}
         />
@@ -67,6 +72,5 @@ const ComponentDrawer = (
 
 ComponentDrawer.propTypes = propTypes;
 ComponentDrawer.defaultProps = defaultProps;
-ComponentDrawer.contextTypes = contextTypes;
 
-export default connect(null, { resetForm: reset })(ComponentDrawer);
+export default ComponentDrawer;

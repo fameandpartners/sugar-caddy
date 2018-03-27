@@ -15,6 +15,7 @@ const TextArray = ({ fields }) => (
         return (
           <li key={item}>
             <Field
+              placeholder="Press enter to create"
               name={item}
               type="text"
               component={TextInput}
@@ -29,7 +30,7 @@ const TextArray = ({ fields }) => (
         );
       }
       return (
-        <li key={item} className="flex">
+        <li key={item} className="flex mb-1">
           <Field
             name={item}
             component={TextBlock}
