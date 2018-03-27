@@ -48,4 +48,5 @@ ComponentDrawerForm.propTypes = propTypes;
 export default reduxForm({
   form: 'ComponentDrawer',
   validate,
+  enableReinitialize: true,
 })(ComponentDrawerForm);
