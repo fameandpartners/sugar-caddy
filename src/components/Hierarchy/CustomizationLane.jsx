@@ -11,21 +11,20 @@ const propTypes = {
   hierarchy: PropTypes.instanceOf(Immutable.Map).isRequired,
 };
 
-const contextTypes = {
-  mode: PropTypes.string.isRequired,
-};
-
-const CustomizationLane = (
-  { levelId, order, hierarchy },
-  { mode },
-) => {
-  const customizations = hierarchy.getIn(['data', 'components']).toList()
+const CustomizationLane = ({ levelId, order, hierarchy }) => {
+  const customizations = hierarchy
+    .getIn(['data', 'components'])
+    .toList()
     .filter(item => item.get('levelId') === levelId);
   const currentPath = hierarchy.get('currentPath');
-  const currentTags =
-    currentPath
-      .slice(0, order - 1)
-      .reduce((acc, curr) => acc.concat(hierarchy.getIn(['data', 'components', curr, 'tags']).toArray() || []), []);
+  const mode = hierarchy.get('mode');
+  const currentTags = currentPath
+    .slice(0, order - 1)
+    .reduce(
+      (acc, curr) =>
+        acc.concat(hierarchy.getIn(['data', 'components', curr, 'tags']).toArray() || []),
+      [],
+    );
 
   return (
     <div
@@ -33,7 +32,10 @@ const CustomizationLane = (
       className="flex bg-grey-light overflow-x-auto p-2"
     >
       {customizations.map((custom) => {
-        const tagIntersect = intersection(currentTags, (custom.get('tags') || Immutable.List()).toArray());
+        const tagIntersect = intersection(
+          currentTags,
+          (custom.get('tags') || Immutable.List()).toArray(),
+        );
         const incompIntersect = intersection(
           currentTags,
           (custom.get('incompatibilities') || Immutable.List()).toArray(),
@@ -43,13 +45,15 @@ const CustomizationLane = (
             key={custom.get('id')}
             order={order}
             customization={custom}
-            mode={hierarchy.get('mode')}
+            mode={mode}
             disabled={
               mode === 'view' &&
               !!currentTags.length &&
               (!tagIntersect.length || incompIntersect.length)
             }
-            selected={mode === 'view' && custom.get('id') === currentPath.get(order - 1)}
+            selected={
+              mode === 'view' && custom.get('id') === currentPath.get(order - 1)
+            }
           />
         );
       })}
@@ -58,6 +62,5 @@ const CustomizationLane = (
 };
 
 CustomizationLane.propTypes = propTypes;
-CustomizationLane.contextTypes = contextTypes;
 
 export default connect(state => ({ hierarchy: state.hierarchy }))(CustomizationLane);

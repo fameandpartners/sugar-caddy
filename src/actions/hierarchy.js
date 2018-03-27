@@ -5,6 +5,9 @@ import {
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
   SET_CURRENT_ID,
+  UPDATE_COMPONENT_LOADING,
+  UPDATE_COMPONENT_FAILURE,
+  UPDATE_COMPONENT_SUCCESS,
 } from 'constants/hierarchy';
 import fetch from 'utils/fetch';
 
@@ -49,6 +52,39 @@ export const setCurrentId = payload => ({
   type: SET_CURRENT_ID,
   payload,
 });
+
+export const updateComponentLoading = () => ({
+  type: UPDATE_COMPONENT_LOADING,
+});
+
+export const updateComponentFailure = err => ({
+  type: UPDATE_COMPONENT_FAILURE,
+  payload: err,
+});
+
+export const updateComponentSuccess = payload => ({
+  type: UPDATE_COMPONENT_SUCCESS,
+  payload,
+});
+
+export function updateComponent(componentId, update) {
+  return (dispatch) => {
+    dispatch(updateComponentLoading());
+    fetch(`/${componentId}.json`, {
+      method: 'PATCH',
+      'content-type': 'Application/json',
+      body: JSON.stringify(update),
+    })
+      .then((data) => {
+        dispatch(updateComponentSuccess({ componentId, update }));
+        return data;
+      })
+      .catch((err) => {
+        dispatch(updateComponentFailure(err));
+        return Promise.reject(err);
+      });
+  };
+}
 
 export default {
   fetchHierarchy,

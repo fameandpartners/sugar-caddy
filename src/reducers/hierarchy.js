@@ -5,6 +5,9 @@ import {
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
   SET_CURRENT_ID,
+  UPDATE_COMPONENT_LOADING,
+  UPDATE_COMPONENT_FAILURE,
+  UPDATE_COMPONENT_SUCCESS,
 } from 'constants/hierarchy';
 import { fromJS } from 'immutable';
 
@@ -19,8 +22,10 @@ const initialState = fromJS({
 
 export default function hierarchy(state = initialState, { type, payload }) {
   switch (type) {
+  case UPDATE_COMPONENT_LOADING:
   case FETCH_HIERARCHY_LOADING:
     return state.set('loading', true);
+  case UPDATE_COMPONENT_FAILURE:
   case FETCH_HIERARCHY_FAILURE:
     return state
       .set('loading', false)
@@ -49,6 +54,10 @@ export default function hierarchy(state = initialState, { type, payload }) {
   }
   case SET_CURRENT_ID:
     return state.set('currentId', payload);
+  case UPDATE_COMPONENT_SUCCESS: {
+    const { componentId, update } = payload;
+    return state.mergeIn(['data', 'components', componentId], fromJS(update));
+  }
   default:
     return state;
   }

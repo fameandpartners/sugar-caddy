@@ -12,7 +12,7 @@ const propTypes = {
   order: PropTypes.number.isRequired,
   mode: PropTypes.string.isRequired,
   updateCurrentPath: PropTypes.func.isRequired,
-  toggleDrawer: PropTypes.func.isRequired,
+  setCurrentId: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
 };
@@ -29,7 +29,7 @@ const Customization = ({
   disabled,
   mode,
   updateCurrentPath,
-  toggleDrawer,
+  setCurrentId,
 }) => (
   <div
     role="button"
@@ -45,7 +45,7 @@ const Customization = ({
           customizationId: customization.get('id'),
           order,
         })
-        : toggleDrawer(customization.get('id')))
+        : setCurrentId(customization.get('id')))
     }
   >
     {customization.get('image') ? (

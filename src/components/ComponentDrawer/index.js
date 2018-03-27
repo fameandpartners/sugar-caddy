@@ -1,1 +1,1 @@
-export default from './ComponentDrawer';
+export default from './ComponentDrawerContainer';
