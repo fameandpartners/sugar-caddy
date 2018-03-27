@@ -24,13 +24,10 @@ export const fetchHierarchySuccess = payload => ({
 });
 
 export function fetchHierarchy() {
-  console.log('fetch hierarchy');
   return (dispatch) => {
     dispatch(fetchHierarchyLoading());
-    console.log('after dispatch');
     return fetch('/.json')
       .then((data) => {
-        console.log('after fetch', data);
         dispatch(fetchHierarchySuccess(data));
         return data;
       })

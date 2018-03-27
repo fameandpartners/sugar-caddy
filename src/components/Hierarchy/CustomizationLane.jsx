@@ -49,7 +49,7 @@ const CustomizationLane = ({ levelId, order, hierarchy }) => {
             disabled={
               mode === 'view' &&
               !!currentTags.length &&
-              (!tagIntersect.length || incompIntersect.length)
+              (!tagIntersect.length || !!incompIntersect.length)
             }
             selected={
               mode === 'view' && custom.get('id') === currentPath.get(order - 1)

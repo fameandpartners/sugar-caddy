@@ -14,58 +14,9 @@ class App extends Component {
     toggleMode: PropTypes.func.isRequired,
   };
 
-  static childContextTypes = {
-    hierarchy: PropTypes.object.isRequired,
-    components: PropTypes.object.isRequired,
-    updateComponent: PropTypes.func.isRequired,
-    mode: PropTypes.string.isRequired,
-    currentPath: PropTypes.array.isRequired,
-  };
-
-  state = {
-    hierarchy: {},
-    components: {},
-    mode: 'edit',
-    currentPath: [],
-  };
-
-  getChildContext() {
-    return {
-      hierarchy: this.state.hierarchy,
-      components: this.state.components,
-      updateComponent: this.updateComponent,
-      mode: this.state.mode,
-      currentPath: this.state.currentPath,
-    };
-  }
-
   componentWillMount() {
     this.props.fetchHierarchy();
-    fetch('https://sugar-caddy-dev.firebaseio.com/.json')
-      .then(text => text.json())
-      .then(response => this.setState(response));
   }
-
-  updateComponent = (componentId, update) => {
-    fetch(
-      `https://sugar-caddy-dev.firebaseio.com/components/${componentId}.json`,
-      {
-        method: 'PATCH',
-        'content-type': 'Application/json',
-        body: JSON.stringify(update),
-      },
-    ).then(() => {
-      const newComponent = Object.assign(
-        {},
-        this.state.components[componentId],
-        update,
-      );
-      const newComponents = Object.assign({}, this.state.components, {
-        [componentId]: newComponent,
-      });
-      this.setState({ components: newComponents });
-    });
-  };
 
   render() {
     const { hierarchy } = this.props;
