@@ -3,18 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ladjs/graceful": "0.0.1",
+    "@ladjs/koa-better-static": "^1.0.5",
+    "@ladjs/logger": "^0.1.0",
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",
     "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
     "babel-runtime": "6.26.0",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",
+    "concurrently": "^3.5.1",
     "classnames": "^2.2.5",
     "css-loader": "0.28.7",
     "dotenv": "4.0.0",
@@ -25,15 +32,29 @@
     "eslint-loader": "1.9.0",
     "eslint-plugin-flowtype": "2.39.1",
     "eslint-plugin-import": "2.8.0",
-    "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
+    "ignore-styles": "^5.0.1",
+    "ip": "^1.1.5",
     "jest": "20.0.4",
+    "koa": "^2.5.0",
+    "koa-404-handler": "0.0.2",
+    "koa-better-error-handler": "^1.3.5",
+    "koa-better-timeout": "0.0.2",
+    "koa-bodyparser": "^4.2.0",
+    "koa-compress": "^2.0.0",
+    "koa-conditional-get": "^2.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-helmet": "^3.3.0",
+    "koa-logger": "^3.2.0",
+    "koa-no-trailing-slash": "^2.1.0",
+    "koa-response-time": "^2.0.0",
     "lodash": "^4.17.5",
     "object-assign": "4.1.1",
+    "path-match": "^1.2.4",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-import": "^11.1.0",
     "postcss-loader": "2.0.8",
@@ -41,8 +62,11 @@
     "prop-types": "^15.6.1",
     "raf": "3.4.0",
     "react": "^16.2.0",
+    "react-autobind": "^1.0.6",
     "react-dev-utils": "^5.0.0",
     "react-dom": "^16.2.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
@@ -59,6 +83,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
+    "start-server": "nodemon server",
+    "start-production": "concurrently -p \"[{name}]\" -n \"WEB\" -c \"bgCyan.bold\" \"npm run start-server\"",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
@@ -96,12 +122,7 @@
       "node"
     ]
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+  "devDependencies": {
+    "eslint-plugin-jsx-a11y": "^5.1.1"
   }
 }
