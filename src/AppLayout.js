@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { Switch, Route } from 'react-router';
-import routes from '../../shared/routes/main';
+import routes from './shared/routes/main';
 
 // CSS STUFFS ?
 // import '../../css/components/AppLayout.scss';

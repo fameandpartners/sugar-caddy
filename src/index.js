@@ -8,10 +8,9 @@ import { reducer as formReducer } from 'redux-form';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import Immutable from 'immutable';
-import App from 'components/App';
 import * as reducers from 'reducers';
 import 'css/index.css';
-import AppLayout from './js/containers/AppLayout';
+import AppLayout from './AppLayout';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -57,14 +56,14 @@ ReactDOM.render(component, document.getElementById('root'));
 registerServiceWorker();
 
 if (module.hot) {
-  module.hot.accept('./js/containers/AppLayout', () => {
+  module.hot.accept('./AppLayout', () => {
     /* eslint-disable global-require */
-    const NextRootContainer = require('./js/containers/AppLayout');
+    const NextRootContainer = require('./AppLayout');
     ReactDOM.render(
       <BrowserRouter>
-        {/* <Provider store={store}> */}
-        <NextRootContainer />
-        {/* </Provider> */}
+        <Provider store={store}>
+          <NextRootContainer />
+        </Provider>
       </BrowserRouter>,
       document.getElementById('root'),
     );

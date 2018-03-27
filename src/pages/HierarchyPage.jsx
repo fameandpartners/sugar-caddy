@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { fetchHierarchy } from 'actions/hierarchy';
 import { fetchComponents } from 'actions/components';
 import { connect } from 'react-redux';
-import Hierarchy from './Hierarchy';
-import ComponentDrawer from './ComponentDrawer';
-import ModeButton from './ModeButton';
+import Hierarchy from 'components/Hierarchy';
+import ComponentDrawer from 'components/ComponentDrawer';
+import ModeButton from 'components/ModeButton';
 
 class App extends Component {
   static propTypes = {
