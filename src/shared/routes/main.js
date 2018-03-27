@@ -1,7 +1,8 @@
 import React from 'react';
+import MainApp from 'components/App';
 
 // Startup Apps
-import MainApp from '../../js/components/startup/MainApp';
+// import MainApp from '../../js/components/startup/MainApp';
 import SecondaryApp from '../../js/components/startup/SecondaryApp';
 
 

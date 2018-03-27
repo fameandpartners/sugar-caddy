@@ -6,12 +6,10 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { createLogger } from 'redux-logger';
-import App from 'components/App';
 import 'css/index.css';
 import AppLayout from './js/containers/AppLayout';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-// import { Provider } from 'react-redux';
 
 const rootReducer = combineReducers({
   form: formReducer,
