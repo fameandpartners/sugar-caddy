@@ -12,7 +12,7 @@ const defaultProps = {
 
 const Incompatibilities = ({ incompatibilities }) => (
   <div id="customization-incompatibilities" className="flex flex-wrap">
-    {incompatibilities.map(tag => (
+    {(incompatibilities || Immutable.List()).map(tag => (
       <div
         key={tag}
         className="border border-red-dark bg-red rounded-full px-1 m-1"

@@ -1,2 +1,2 @@
-// export components from './components';
+export components from './components';
 export hierarchy from './hierarchy';

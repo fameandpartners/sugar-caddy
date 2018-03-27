@@ -8,21 +8,26 @@ import Customization from './Customization';
 const propTypes = {
   levelId: PropTypes.string.isRequired,
   order: PropTypes.number.isRequired,
-  hierarchy: PropTypes.instanceOf(Immutable.Map).isRequired,
+  mode: PropTypes.string.isRequired,
+  currentPath: PropTypes.instanceOf(Immutable.List).isRequired,
+  components: PropTypes.instanceOf(Immutable.Map).isRequired,
 };
 
-const CustomizationLane = ({ levelId, order, hierarchy }) => {
-  const customizations = hierarchy
-    .getIn(['data', 'components'])
+const CustomizationLane = ({
+  levelId,
+  order,
+  mode,
+  currentPath,
+  components,
+}) => {
+  const customizations = components
     .toList()
     .filter(item => item.get('levelId') === levelId);
-  const currentPath = hierarchy.get('currentPath');
-  const mode = hierarchy.get('mode');
   const currentTags = currentPath
     .slice(0, order - 1)
     .reduce(
       (acc, curr) =>
-        acc.concat(hierarchy.getIn(['data', 'components', curr, 'tags']).toArray() || []),
+        acc.concat(components.getIn([curr, 'tags']).toArray() || []),
       [],
     );
 
@@ -63,4 +68,8 @@ const CustomizationLane = ({ levelId, order, hierarchy }) => {
 
 CustomizationLane.propTypes = propTypes;
 
-export default connect(state => ({ hierarchy: state.hierarchy }))(CustomizationLane);
+export default connect(state => ({
+  mode: state.hierarchy.get('mode'),
+  currentPath: state.hierarchy.get('currentPath'),
+  components: state.components.get('data'),
+}))(CustomizationLane);

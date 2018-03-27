@@ -12,7 +12,7 @@ const defaultProps = {
 
 const CustomizationTags = ({ tags }) => (
   <div id="customization-tags" className="flex flex-wrap">
-    {tags.map(tag => (
+    {(tags || Immutable.List()).map(tag => (
       <div
         key={tag}
         className="border border-green-dark bg-green rounded-full px-1 m-1"

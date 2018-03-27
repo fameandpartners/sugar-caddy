@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fetchHierarchy } from 'actions/hierarchy';
+import { fetchComponents } from 'actions/components';
 import { connect } from 'react-redux';
 import Hierarchy from './Hierarchy';
 import ComponentDrawer from './ComponentDrawer';
@@ -9,10 +10,12 @@ import ModeButton from './ModeButton';
 class App extends Component {
   static propTypes = {
     fetchHierarchy: PropTypes.func.isRequired,
+    fetchComponents: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
     this.props.fetchHierarchy();
+    this.props.fetchComponents();
   }
 
   render() {
@@ -30,4 +33,5 @@ class App extends Component {
 
 export default connect(null, {
   fetchHierarchy,
+  fetchComponents,
 })(App);

@@ -6,7 +6,7 @@ import HierarchyLevel from './HierarchyLevel';
 
 const Hierarchy = ({ hierarchy }) => (
   <div id="hierarchy" className="container my-8">
-    {(hierarchy.getIn(['data', 'hierarchy']) || Immutable.Map())
+    {(hierarchy || Immutable.Map())
       .toList()
       .sort((a, b) => a.get('order') - b.get('order'))
       .map(level => (
@@ -19,4 +19,4 @@ Hierarchy.propTypes = {
   hierarchy: PropTypes.object.isRequired,
 };
 
-export default connect(state => ({ hierarchy: state.hierarchy }))(Hierarchy);
+export default connect(state => ({ hierarchy: state.hierarchy.get('data') }))(Hierarchy);
