@@ -5,18 +5,20 @@ import classnames from 'classnames';
 const propTypes = {
   input: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onKeyPress: PropTypes.func,
 };
 
 const defaultProps = {
+  placeholder: '',
   onKeyPress: () => {},
 };
 
 const TextInput = ({
-  input, type, onKeyPress, meta: { touched, error },
+  input, type, onKeyPress, meta: { touched, error }, placeholder,
 }) => (
-  <div className="w-32">
+  <div className="w-48">
     <input
       className={classnames(
         'bg-grey-lighter appearance-none border-2 rounded-sm w-full p-2 text-grey-darker',
@@ -28,6 +30,7 @@ const TextInput = ({
       id="inline-full-name"
       type={type}
       {...input}
+      placeholder={placeholder}
       onKeyPress={onKeyPress}
     />
     {touched && error && <div className="text-red">{error}</div>}
