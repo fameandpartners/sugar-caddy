@@ -93,6 +93,7 @@ module.exports = {
       constants: path.resolve(paths.appSrc, 'constants'),
       pages: path.resolve(paths.appSrc, 'pages'),
       reducers: path.resolve(paths.appSrc, 'reducers'),
+      requests: path.resolve(paths.appSrc, 'requests'),
       utils: path.resolve(paths.appSrc, 'utils'),
     },
     plugins: [

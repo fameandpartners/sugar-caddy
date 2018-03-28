@@ -7,7 +7,7 @@ const propTypes = {
 };
 
 const TextBlock = ({ input: { value }, onDelete }) => (
-  <div className="flex p-2 border border-grey-darkest rounded-sm">
+  <div className="border border-grey-darkest flex px-2 py-1 rounded-full">
     <div>{value}</div>
     <button type="button" className="ml-1" onClick={onDelete}>
       &times;

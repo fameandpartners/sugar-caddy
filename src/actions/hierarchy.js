@@ -1,4 +1,5 @@
 import {
+  FETCH_HIERARCHY,
   FETCH_HIERARCHY_LOADING,
   FETCH_HIERARCHY_FAILURE,
   FETCH_HIERARCHY_SUCCESS,
@@ -6,7 +7,8 @@ import {
   UPDATE_CURRENT_PATH,
   SET_CURRENT_ID,
 } from 'constants/hierarchy';
-import fetch from 'utils/fetch';
+import requestWrapper from 'utils/request-wrapper';
+import { fetchHierarchyApi } from 'requests';
 
 export const fetchHierarchyLoading = () => ({ type: FETCH_HIERARCHY_LOADING });
 
@@ -20,20 +22,7 @@ export const fetchHierarchySuccess = payload => ({
   payload,
 });
 
-export function fetchHierarchy() {
-  return (dispatch) => {
-    dispatch(fetchHierarchyLoading());
-    return fetch('/hierarchy.json')
-      .then((data) => {
-        dispatch(fetchHierarchySuccess(data));
-        return data;
-      })
-      .catch((err) => {
-        dispatch(fetchHierarchyFailure(err));
-        return Promise.reject(err);
-      });
-  };
-}
+export const fetchHierarchy = requestWrapper(FETCH_HIERARCHY, fetchHierarchyApi);
 
 export const toggleMode = payload => ({ type: TOGGLE_HIERARCHY_MODE, payload });
 

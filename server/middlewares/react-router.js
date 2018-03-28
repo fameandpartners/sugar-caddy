@@ -1,7 +1,8 @@
 import React from 'react';
-import { StaticRouter } from 'react-router';
+import { ConnectedRouter } from 'react-router-redux';
 import ReactDOMServer from 'react-dom/server';
-// import { Provider } from 'react-redux'; // FOR REDUX LATER?
+import { Provider } from 'react-redux';
+import configureStore from '../../src/store';
 
 // Assets
 const clientAssets = require('../../build/asset-manifest.json');
@@ -17,20 +18,20 @@ const server = ({
   async (ctx, next) => {
     const location = ctx.request.url;
 
+    console.log('location', location);
+
     try {
       const routerContext = {};
 
+      const { store, history } = configureStore();
+
       // Initial Data
       const view = ReactDOMServer.renderToString((
-        <StaticRouter
-          location={location}
-          context={routerContext}
-        >
-          <Layout
-            location={location}
-            context={routerContext}
-          />
-        </StaticRouter>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <Layout />
+          </ConnectedRouter>
+        </Provider>
       ));
 
       ctx.state = {

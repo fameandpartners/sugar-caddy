@@ -1,4 +1,5 @@
 import {
+  FETCH_COMPONENTS,
   FETCH_COMPONENTS_LOADING,
   FETCH_COMPONENTS_FAILURE,
   FETCH_COMPONENTS_SUCCESS,
@@ -7,6 +8,8 @@ import {
   UPDATE_COMPONENT_SUCCESS,
 } from 'constants/components';
 import fetch from 'utils/fetch';
+import requestWrapper from 'utils/request-wrapper';
+import { fetchComponentsApi } from 'requests';
 
 export const fetchComponentsLoading = () => ({
   type: FETCH_COMPONENTS_LOADING,
@@ -22,20 +25,10 @@ export const fetchComponentsSuccess = payload => ({
   payload,
 });
 
-export function fetchComponents() {
-  return (dispatch) => {
-    dispatch(fetchComponentsLoading());
-    return fetch('/components.json')
-      .then((data) => {
-        dispatch(fetchComponentsSuccess(data));
-        return data;
-      })
-      .catch((err) => {
-        dispatch(fetchComponentsFailure(err));
-        return Promise.reject(err);
-      });
-  };
-}
+export const fetchComponents = requestWrapper(
+  FETCH_COMPONENTS,
+  fetchComponentsApi,
+);
 
 export const updateComponentLoading = () => ({
   type: UPDATE_COMPONENT_LOADING,

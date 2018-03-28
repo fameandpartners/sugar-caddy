@@ -23,13 +23,13 @@ const Logger = require('@ladjs/logger');
 // const Mongoose = require('@ladjs/mongoose');
 const Graceful = require('@ladjs/graceful');
 
-const config = require('./config/environment-config.js');
+const config = require('./config/environment-config');
 const helpers = require('./helpers');
 
 // React
-const reactRouter = require('./server/middlewares/react-router.js');
+const reactRouter = require('./server/middlewares/react-router');
 
-const AppLayout = require('./src/js/containers/AppLayout.js');
+const AppLayout = require('./src/AppLayout');
 
 // Frontend
 const templateRenderer = require('./src/shared/template');

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import autoBind from 'react-autobind';
 import { Switch, Route } from 'react-router';
+import convertProducts from 'utils/convert-products';
 import routes from './shared/routes/main';
 
 // CSS STUFFS ?
@@ -13,6 +14,11 @@ class AppLayout extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+  }
+
+  componentWillMount() {
+    console.log('app layout mount');
+    console.log(JSON.stringify(convertProducts()));
   }
 
   getInitialSettings() {
