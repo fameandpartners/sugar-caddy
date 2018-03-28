@@ -2,7 +2,7 @@
 
 @import "tailwindcss/components";
 
-@import "./components/Customization.css";
+@import "./components/index.css";
 
 @import "tailwindcss/utilities";
 

@@ -11,4 +11,11 @@ export const updateComponentApi = (componentId, update) =>
     body: JSON.stringify(update),
   });
 
+export const createProductApi = product =>
+  fetch(`/products/${product.id}.json`, {
+    method: 'PUT',
+    'content-type': 'Application/json',
+    body: JSON.stringify(product),
+  });
+
 export const fetchProductsApi = () => fetch('/products.json');

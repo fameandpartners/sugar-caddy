@@ -8,17 +8,26 @@ const propTypes = {
   placeholder: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onKeyPress: PropTypes.func,
+  className: PropTypes.string,
+  style: PropTypes.object,
 };
 
 const defaultProps = {
   placeholder: '',
   onKeyPress: () => {},
+  className: '',
+  style: {},
 };
 
 const TextInput = ({
-  input, type, onKeyPress, meta: { touched, error }, placeholder,
+  input,
+  type,
+  onKeyPress,
+  meta: { touched, error },
+  placeholder,
+  className,
 }) => (
-  <div className="w-48">
+  <div className={classnames(className)}>
     <input
       className={classnames(
         'bg-grey-lighter appearance-none border-2 rounded-sm w-full p-2 text-grey-darker',

@@ -18,6 +18,7 @@ const TextArray = ({ fields }) => (
               placeholder="Press enter to create"
               name={item}
               type="text"
+              className="w-48"
               component={TextInput}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
@@ -33,6 +34,7 @@ const TextArray = ({ fields }) => (
         <li key={item} className="flex mb-1">
           <Field
             name={item}
+            className="w-48"
             component={TextBlock}
             onDelete={() => fields.remove(index)}
           />
