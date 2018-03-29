@@ -8,8 +8,9 @@ const ProductHeading = () => (
     <div className="w-24 mr-2 text-sm font-light">Pricing</div>
     <div className="w-24 mr-2 text-sm font-light">Colors</div>
     <div className="w-24 mr-2 text-sm font-light">Images</div>
-    <div className="w-24 mr-2 text-sm font-light">Customizations</div>
-    <div className="w-32 mr-2 text-sm font-light">Old Customizations</div>
+    <div className="w-24 mr-2 text-sm font-light truncate">Customizations</div>
+    <div className="w-24 mr-2 text-sm font-light truncate">Old Customizations</div>
+    <div className="w-16" />
   </div>
 );
 

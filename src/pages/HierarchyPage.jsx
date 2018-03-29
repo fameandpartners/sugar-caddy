@@ -20,7 +20,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div>
         <div className="mt-6 ml-8">
           <ModeButton />
         </div>
