@@ -18,4 +18,10 @@ export const createProductApi = product =>
     body: JSON.stringify(product),
   });
 
+export const deleteProductApi = productId =>
+  fetch(`/products/${productId}.json`, {
+    method: 'DELETE',
+    'content-type': 'Application/json',
+  });
+
 export const fetchProductsApi = () => fetch('/products.json');

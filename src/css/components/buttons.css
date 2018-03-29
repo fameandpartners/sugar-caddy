@@ -1,0 +1,31 @@
+.btn {
+  @apply .py-3 .px-6 .rounded-sm .font-light;
+}
+
+button.btn-link {
+  @apply .text-grey-darkest .underline .bg-transparent;
+}
+
+.btn-link:focus {
+  @apply .outline-none;
+}
+
+.btn-link:hover {
+  @apply .text-grey-darker;
+}
+
+.btn-primary {
+  @apply .text-white .bg-blue;
+}
+
+.btn-primary:hover {
+  @apply .bg-blue-dark;
+}
+
+.btn-error {
+  @apply .text-white .bg-red;
+}
+
+.btn-error:hover {
+  @apply .bg-red-dark;
+}
