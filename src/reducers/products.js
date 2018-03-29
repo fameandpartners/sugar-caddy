@@ -7,6 +7,7 @@ import {
   ADD_PRODUCT_FAILURE,
   ADD_PRODUCT_SUCCESS,
   SET_PRODUCT_ID,
+  SET_PRODUCT_MODE,
   DELETE_PRODUCT_LOADING,
   DELETE_PRODUCT_FAILURE,
   DELETE_PRODUCT_SUCCESS,
@@ -40,6 +41,8 @@ export default function products(state = initialState, { type, payload }) {
     return state.setIn(['data', payload.id], fromJS(payload));
   case SET_PRODUCT_ID:
     return state.set('currentId', payload);
+  case SET_PRODUCT_MODE:
+    return state.set('mode', payload);
   case DELETE_PRODUCT_SUCCESS:
     return state
       .set('currentId', '')

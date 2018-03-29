@@ -11,12 +11,12 @@ import ProductsPage from 'pages/ProductsPage';
 //   - This allows us to customize and decorate our render on runtime
 const routes = [
   {
-    path: '/products',
-    render: () => props => <ProductsPage {...props} />,
+    path: '/products/:productId',
+    render: () => props => <HierarchyPage {...props} />,
   },
   {
     path: '/',
-    render: () => props => <HierarchyPage {...props} />,
+    render: () => props => <ProductsPage {...props} />,
   },
 ];
 

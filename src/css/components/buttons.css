@@ -29,3 +29,19 @@ button.btn-link {
 .btn-error:hover {
   @apply .bg-red-dark;
 }
+
+.btn-grey {
+  @apply .border .border-grey-dark .bg-grey-dark .text-white;
+}
+
+.btn-grey:hover {
+  @apply .bg-grey-darker;
+}
+
+.btn-grey-inverse {
+  @apply .border .border-grey-dark .bg-transparent .text-grey-dark;
+}
+
+.btn-grey-inverse:hover {
+  @apply .underline;
+}

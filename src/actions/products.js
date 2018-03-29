@@ -5,6 +5,7 @@ import {
   DELETE_PRODUCT_FAILURE,
   DELETE_PRODUCT_SUCCESS,
   SET_PRODUCT_ID,
+  SET_PRODUCT_MODE,
 } from 'constants/products';
 import requestWrapper from 'utils/request-wrapper';
 import { fetchProductsApi, createProductApi, deleteProductApi } from 'requests';
@@ -41,6 +42,11 @@ export const deleteProduct = productId => (dispatch) => {
 export const setCurrentId = (id = '') => ({
   type: SET_PRODUCT_ID,
   payload: id,
+});
+
+export const setProductMode = (mode = '') => ({
+  type: SET_PRODUCT_MODE,
+  payload: mode,
 });
 
 export default {

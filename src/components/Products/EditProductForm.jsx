@@ -1,49 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import TextInput from 'components/common/TextInput';
 
 const propTypes = {
+  id: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  size: PropTypes.number.isRequired,
 };
 
-const validate = (values) => {
-  const errors = {};
-
-  if (!values.code) {
-    errors.code = 'Code is required';
-  }
-
-  if (!values.name) {
-    errors.name = 'Name is required.';
-  }
-
-  return errors;
-};
-
-const CreateProductForm = ({ handleSubmit, size }) => (
-  <form
-    onSubmit={handleSubmit}
-    className="flex px-6 py-2 border border-grey-darker items-center"
-  >
-    <div className="w-8">{size + 1}</div>
+const EditProductForm = ({ id, handleSubmit }) => (
+  <form onSubmit={handleSubmit}>
     <div className="w-32 mr-2">
       <Field
         placeholder="Code"
+        name={`${id}-code`}
         type="text"
-        name="code"
         component={TextInput}
       />
     </div>
+
     <div className="w-1/6 mr-3">
       <Field
         placeholder="Name"
+        name={`${id}-name`}
         type="text"
-        name="name"
         component={TextInput}
       />
     </div>
+
     <div className="grow-1">
       <button
         className="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded-sm"
@@ -55,9 +39,8 @@ const CreateProductForm = ({ handleSubmit, size }) => (
   </form>
 );
 
-CreateProductForm.propTypes = propTypes;
+EditProductForm.propTypes = propTypes;
 
 export default reduxForm({
-  form: 'CreateProductForm',
-  validate,
-})(CreateProductForm);
+  form: 'EditProductForm',
+})(EditProductForm);
