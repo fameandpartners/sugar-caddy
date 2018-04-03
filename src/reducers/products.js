@@ -44,9 +44,8 @@ export default function products(state = initialState, { type, payload }) {
   case SET_PRODUCT_MODE:
     return state.set('mode', payload);
   case DELETE_PRODUCT_SUCCESS:
-    return state
-      .set('currentId', '')
-      .update('data', value => value.filter((_, key) => key !== payload));
+    return state.update('data', value =>
+      value.filter((_, key) => key !== payload));
   default:
     return state;
   }

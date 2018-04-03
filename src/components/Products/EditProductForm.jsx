@@ -33,7 +33,7 @@ const EditProductForm = ({ id, handleSubmit }) => (
         className="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded-sm"
         type="submit"
       >
-        Add
+        Edit
       </button>
     </div>
   </form>

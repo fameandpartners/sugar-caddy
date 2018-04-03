@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import { deleteProduct } from 'actions/products';
 
 const propTypes = {
   currentProduct: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -57,14 +55,4 @@ const DeleteProductModal = ({ currentProduct, onClose, deleteProd }) => (
 
 DeleteProductModal.propTypes = propTypes;
 
-export default connect(
-  (state) => {
-    const currentId = state.products.get('currentId');
-    const products = state.products.get('data');
-    const currentProduct = products.find(prod => prod.get('id') === currentId);
-    return {
-      currentProduct,
-    };
-  },
-  { deleteProd: deleteProduct },
-)(DeleteProductModal);
+export default DeleteProductModal;

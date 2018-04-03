@@ -1,1 +1,1 @@
-export default from './DeleteProductModal';
+export default from './DeleteProductModalContainer';

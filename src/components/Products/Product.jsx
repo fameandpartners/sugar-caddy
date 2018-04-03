@@ -20,21 +20,34 @@ const Product = ({
     <div className="w-8 mr-2">{product.get('order')}</div>
     <div className="w-32 mr-2">{product.get('code')}</div>
     <div className="flex-1 w-1/6 mr-2">{product.get('name')}</div>
-    <Link to="/" className="w-24 mr-2 font-light">
-      Open
-    </Link>
-    <Link to="/" className="w-24 mr-2 font-light">
-      Open
-    </Link>
-    <Link to="/" className="w-24 mr-2 font-light">
-      Open
-    </Link>
-    <Link to={`/products/${product.get('id')}`} className="w-24 mr-2 font-light">
-      Open
-    </Link>
-    <Link to="/" className="w-24 mr-2 font-light">
-      Open
-    </Link>
+    <div className="w-24 mr-2">
+      <Link to={`/products/${product.get('id')}/pricing`} className="font-light">
+        Open
+      </Link>
+    </div>
+    <div className="w-24 mr-2">
+      <Link to={`/products/${product.get('id')}/colors`} className="font-light">
+        Open
+      </Link>
+    </div>
+    <div className="w-24 mr-2">
+      <Link to={`/products/${product.get('id')}/images`} className="font-light">
+        Open
+      </Link>
+    </div>
+    <div className="w-24 mr-2">
+      <Link
+        to={`/products/${product.get('id')}/hierarchy`}
+        className="font-light"
+      >
+        Open
+      </Link>
+    </div>
+    <div className="w-24 mr-2">
+      <Link to={`/products/${product.get('id')}/old`} className="font-light">
+        Open
+      </Link>
+    </div>
     {editMode ? (
       <div
         role="button"
