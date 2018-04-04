@@ -5,7 +5,6 @@ import {
   FETCH_HIERARCHY_SUCCESS,
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
-  SET_CURRENT_ID,
 } from 'constants/hierarchy';
 import requestWrapper from 'utils/request-wrapper';
 import { fetchHierarchyApi } from 'requests';
@@ -28,11 +27,6 @@ export const toggleMode = payload => ({ type: TOGGLE_HIERARCHY_MODE, payload });
 
 export const updateCurrentPath = payload => ({
   type: UPDATE_CURRENT_PATH,
-  payload,
-});
-
-export const setCurrentId = (payload = '') => ({
-  type: SET_CURRENT_ID,
   payload,
 });
 

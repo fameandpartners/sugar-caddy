@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import * as hierarchyActions from 'actions/hierarchy';
 import * as componentActions from 'actions/components';
 import ComponentDrawer from './ComponentDrawer';
 
@@ -27,12 +26,11 @@ ComponentDrawerContainer.propTypes = propTypes;
 
 export default connect(
   state => ({
-    currentId: state.hierarchy.get('currentId'),
+    currentId: state.components.get('currentId'),
     components: state.components.get('data'),
   }),
   {
     resetForm: reset,
-    ...hierarchyActions,
     ...componentActions,
   },
 )(ComponentDrawerContainer);

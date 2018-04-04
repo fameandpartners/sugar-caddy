@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import * as hierarchyActions from 'actions/hierarchy';
+import * as componentActions from 'actions/components';
 import CustomizationTags from './CustomizationTags';
 import Incompatibilities from './Incompatibilities';
 
@@ -69,4 +70,4 @@ const Customization = ({
 Customization.propTypes = propTypes;
 Customization.defaultProps = defaultProps;
 
-export default connect(null, hierarchyActions)(Customization);
+export default connect(null, { ...hierarchyActions, ...componentActions })(Customization);

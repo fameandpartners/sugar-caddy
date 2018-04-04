@@ -32,3 +32,9 @@ export const createComponentApi = component =>
     'content-type': 'Application/json',
     body: JSON.stringify(component),
   });
+
+export const deleteComponentApi = componentId =>
+  fetch(`/components/${componentId}.json`, {
+    method: 'DELETE',
+    'content-type': 'Application/json',
+  });

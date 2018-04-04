@@ -9,6 +9,7 @@ const propTypes = {
   resetForm: PropTypes.func.isRequired,
   setCurrentId: PropTypes.func.isRequired,
   updateComponent: PropTypes.func.isRequired,
+  deleteComponent: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -21,6 +22,7 @@ const ComponentDrawer = ({
   resetForm,
   setCurrentId,
   updateComponent,
+  deleteComponent,
 }) => {
   if (!open) return <div />;
   return (
@@ -47,6 +49,10 @@ const ComponentDrawer = ({
             )
               .toArray()
               .concat(''),
+          }}
+          onDelete={() => {
+            deleteComponent(customization.get('id'));
+            setCurrentId();
           }}
           onSubmit={(data) => {
             const tags = data.tags

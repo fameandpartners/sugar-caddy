@@ -16,9 +16,10 @@ const validate = (values) => {
 
 const propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
-const ComponentDrawerForm = ({ handleSubmit }) => (
+const ComponentDrawerForm = ({ handleSubmit, onDelete }) => (
   <form className="flex-1 flex justify-between" onSubmit={handleSubmit}>
     <div>
       <div className="text-lg font-semibold mb-2">Name</div>
@@ -33,12 +34,25 @@ const ComponentDrawerForm = ({ handleSubmit }) => (
       <FieldArray type="text" name="incompatibilities" component={TextArray} />
     </div>
     <div className="self-center">
-      <button
-        className="bg-black hover:bg-grey-darkest text-white font-bold py-2 px-4 rounded-sm"
-        type="submit"
-      >
-        Done
-      </button>
+      <div className="text-center">
+        <button
+          className="bg-black hover:bg-grey-darkest text-white font-bold py-2 px-4 rounded-sm"
+          type="submit"
+        >
+          Done
+        </button>
+      </div>
+      <div>
+        <button
+          className="btn btn-link"
+          onClick={(e) => {
+            e.preventDefault();
+            onDelete();
+          }}
+        >
+          Delete module
+        </button>
+      </div>
     </div>
   </form>
 );
