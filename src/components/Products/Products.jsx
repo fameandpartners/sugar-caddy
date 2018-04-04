@@ -46,7 +46,7 @@ class Products extends Component {
   render() {
     const { products, mode } = this.props;
     return (
-      <div id="products" className="md:mx-8 sm:mx-6 mx-3">
+      <div id="products" className="md:mx-8 sm:mx-6 mx-3 my-6">
         <div className="flex justify-end text-sm">
           <button
             className={classnames('py-2 px-4', {

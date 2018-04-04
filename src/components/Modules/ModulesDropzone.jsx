@@ -10,10 +10,6 @@ class ModulesDropzone extends Component {
     onDrop: PropTypes.func.isRequired,
   };
 
-  static childContext = {
-
-  };
-
   state = { dropzoneActive: false };
 
   onDropzoneClick = () => {
@@ -34,9 +30,9 @@ class ModulesDropzone extends Component {
     const { children } = this.props;
     return (
       <Dropzone
-        id="modules"
+        id="modules-dropzone"
         ref={(el) => { this.dropzoneRef = el; }}
-        className="w-screen h-screen md:px-8 sm:px-6 px-3"
+        className="w-screen h-screen md:px-8 sm:px-6 px-3 py-6"
         disableClick
         onDrop={this.onDrop}
         onDragEnter={this.onDragEnter}

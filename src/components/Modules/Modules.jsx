@@ -45,11 +45,7 @@ class Modules extends Component {
   render() {
     const { uploading } = this.props;
     return (
-      <ModulesDropzone
-        id="modules"
-        className="w-screen h-screen md:px-8 sm:px-6 px-3"
-        onDrop={this.handleDrop}
-      >
+      <ModulesDropzone onDrop={this.handleDrop}>
         {uploading && <Overlay>Uploading images...</Overlay>}
         <AddModulesButton />
         <ModuleList />
@@ -60,9 +56,9 @@ class Modules extends Component {
 
 export default connect(
   (state) => {
-    const anyUploading = state.uploads.get('items').size > 0 && state.uploads
-      .get('items')
-      .some(item => item.get('status') === 'loading');
+    const anyUploading =
+      state.uploads.get('items').size > 0 &&
+      state.uploads.get('items').some(item => item.get('status') === 'loading');
     return {
       uploading: anyUploading,
     };

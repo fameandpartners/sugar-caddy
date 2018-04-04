@@ -4,10 +4,9 @@ import { fetchHierarchy } from 'actions/hierarchy';
 import { fetchComponents } from 'actions/components';
 import { connect } from 'react-redux';
 import Hierarchy from 'components/Hierarchy';
-import ComponentDrawer from 'components/ComponentDrawer';
 import ModeButton from 'components/ModeButton';
 
-class App extends Component {
+class HierarchyPage extends Component {
   static propTypes = {
     fetchHierarchy: PropTypes.func.isRequired,
     fetchComponents: PropTypes.func.isRequired,
@@ -33,4 +32,4 @@ class App extends Component {
 export default connect(null, {
   fetchHierarchy,
   fetchComponents,
-})(App);
+})(HierarchyPage);

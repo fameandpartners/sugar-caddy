@@ -3,30 +3,28 @@ import PropTypes from 'prop-types';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Products from 'components/Products';
 import Modules from 'components/Modules';
 import qs from 'querystring';
+import { push } from 'react-router-redux';
 
 const tabs = ['modules', 'products', 'themes'];
 
 const propTypes = {
   tabIndex: PropTypes.number.isRequired,
+  historyPush: PropTypes.func.isRequired,
 };
 
-const Dashboard = ({ tabIndex }) => (
+const Dashboard = ({ tabIndex, historyPush }) => (
   <div id="dashboard">
-    <Tabs selectedIndex={tabIndex} onSelect={() => {}}>
+    <Tabs
+      selectedIndex={tabIndex}
+      onSelect={index => historyPush(`?tab=${tabs[index]}`)}
+    >
       <TabList>
-        <Tab>
-          <Link to="?tab=modules">Modules</Link>
-        </Tab>
-        <Tab>
-          <Link to="?tab=products">Products</Link>
-        </Tab>
-        <Tab>
-          <Link to="?tab=themes">Theme Pages</Link>
-        </Tab>
+        <Tab>Modules</Tab>
+        <Tab>Products</Tab>
+        <Tab>Theme Pages</Tab>
       </TabList>
 
       <TabPanel>
@@ -48,10 +46,13 @@ const Dashboard = ({ tabIndex }) => (
 
 Dashboard.propTypes = propTypes;
 
-export default connect((state) => {
-  const { tab } = qs.parse(state.router.location.search.slice(1));
-  const tabIndex = tabs.indexOf(tab);
-  return {
-    tabIndex: tabIndex > -1 ? tabIndex : 0,
-  };
-})(Dashboard);
+export default connect(
+  (state) => {
+    const { tab } = qs.parse(state.router.location.search.slice(1));
+    const tabIndex = tabs.indexOf(tab);
+    return {
+      tabIndex: tabIndex > -1 ? tabIndex : 0,
+    };
+  },
+  { historyPush: push },
+)(Dashboard);
