@@ -6,10 +6,11 @@ import {
   UPDATE_COMPONENT_LOADING,
   UPDATE_COMPONENT_FAILURE,
   UPDATE_COMPONENT_SUCCESS,
+  ADD_COMPONENT,
 } from 'constants/components';
 import fetch from 'utils/fetch';
 import requestWrapper from 'utils/request-wrapper';
-import { fetchComponentsApi } from 'requests';
+import { fetchComponentsApi, createComponentApi } from 'requests';
 
 export const fetchComponentsLoading = () => ({
   type: FETCH_COMPONENTS_LOADING,
@@ -62,3 +63,10 @@ export function updateComponent(componentId, update) {
       });
   };
 }
+
+console.log('add component', ADD_COMPONENT);
+
+export const createComponent = requestWrapper(
+  ADD_COMPONENT,
+  createComponentApi,
+);

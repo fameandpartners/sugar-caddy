@@ -25,3 +25,10 @@ export const deleteProductApi = productId =>
   });
 
 export const fetchProductsApi = () => fetch('/products.json');
+
+export const createComponentApi = component =>
+  fetch(`/components/${component.id}.json`, {
+    method: 'PUT',
+    'content-type': 'Application/json',
+    body: JSON.stringify(component),
+  });

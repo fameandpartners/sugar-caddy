@@ -6,6 +6,9 @@ import {
   UPDATE_COMPONENT_LOADING,
   UPDATE_COMPONENT_FAILURE,
   UPDATE_COMPONENT_SUCCESS,
+  ADD_COMPONENT_LOADING,
+  ADD_COMPONENT_FAILURE,
+  ADD_COMPONENT_SUCCESS,
 } from 'constants/components';
 
 const initialState = fromJS({
@@ -18,9 +21,11 @@ export default function components(state = initialState, { type, payload }) {
   switch (type) {
   case FETCH_COMPONENTS_LOADING:
   case UPDATE_COMPONENT_LOADING:
+  case ADD_COMPONENT_LOADING:
     return state.set('loading', true).set('error', '');
   case FETCH_COMPONENTS_FAILURE:
   case UPDATE_COMPONENT_FAILURE:
+  case ADD_COMPONENT_FAILURE:
     return state.set('error', payload).set('loading', false);
   case FETCH_COMPONENTS_SUCCESS:
     return state.merge({
@@ -31,6 +36,9 @@ export default function components(state = initialState, { type, payload }) {
   case UPDATE_COMPONENT_SUCCESS: {
     const { componentId, update } = payload;
     return state.mergeIn(['data', componentId], fromJS(update));
+  }
+  case ADD_COMPONENT_SUCCESS: {
+    return state.setIn(['data', payload.id], fromJS(payload));
   }
   default:
     return state;

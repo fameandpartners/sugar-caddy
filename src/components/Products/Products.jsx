@@ -1,27 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { reset } from 'redux-form';
 import classnames from 'classnames';
 import uuidV4 from 'uuid/v4';
-import { createProduct, setProductMode } from 'actions/products';
+import { fetchProducts, createProduct, setProductMode } from 'actions/products';
 import ProductHeading from './ProductHeading';
 import ProductList from './ProductList';
 import CreateProductForm from './CreateProductForm';
 
-const propTypes = {
-  products: PropTypes.instanceOf(Immutable.Map).isRequired,
-  mode: PropTypes.string.isRequired,
-  createNewProduct: PropTypes.func.isRequired,
-  setMode: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
-};
+class Products extends Component {
+  static propTypes = {
+    products: PropTypes.instanceOf(Immutable.Map).isRequired,
+    mode: PropTypes.string.isRequired,
+    createNewProduct: PropTypes.func.isRequired,
+    setMode: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
+    fetchProducts: PropTypes.func.isRequired,
+  };
 
-const Products = ({
-  products, mode, createNewProduct, setMode, resetForm,
-}) => {
-  const handleCreateSubmit = (data) => {
+  componentWillMount() {
+    this.props.fetchProducts();
+  }
+
+  handleCreateSubmit = (data) => {
+    const { products, resetForm, createNewProduct } = this.props;
     const product = Object.assign({}, data, {
       id: uuidV4(),
       pricing: { audPrice: '', usdPrice: '' },
@@ -34,26 +38,38 @@ const Products = ({
     });
   };
 
-  const handleEditClick = () =>
-    (mode === 'view' ? setMode('edit') : setMode('view'));
+  handleEditClick = () =>
+    (this.props.mode === 'view'
+      ? this.props.setMode('edit')
+      : this.props.setMode('view'));
 
-  return (
-    <div id="products">
-      <div className="flex justify-end text-sm">
-        <button className={classnames('py-2 px-4', { 'btn btn-grey-inverse': mode === 'view', 'btn btn-grey': mode === 'edit' })} onClick={handleEditClick}>
-          Edit Products
-        </button>
+  render() {
+    const { products, mode } = this.props;
+    return (
+      <div id="products" className="md:mx-8 sm:mx-6 mx-3">
+        <div className="flex justify-end text-sm">
+          <button
+            className={classnames('py-2 px-4', {
+              'btn btn-grey-inverse': mode === 'view',
+              'btn btn-grey': mode === 'edit',
+            })}
+            onClick={this.handleEditClick}
+          >
+            Edit Products
+          </button>
+        </div>
+        <ProductHeading />
+        <ProductList products={products} />
+        {mode === 'view' && (
+          <CreateProductForm
+            onSubmit={this.handleCreateSubmit}
+            size={products.size}
+          />
+        )}
       </div>
-      <ProductHeading />
-      <ProductList products={products} />
-      {mode === 'view' && (
-        <CreateProductForm onSubmit={handleCreateSubmit} size={products.size} />
-      )}
-    </div>
-  );
-};
-
-Products.propTypes = propTypes;
+    );
+  }
+}
 
 export default connect(
   state => ({
@@ -64,5 +80,6 @@ export default connect(
     createNewProduct: createProduct,
     resetForm: reset,
     setMode: setProductMode,
+    fetchProducts,
   },
 )(Products);

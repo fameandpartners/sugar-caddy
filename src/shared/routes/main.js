@@ -1,8 +1,9 @@
 import React from 'react';
 import HierarchyPage from 'pages/HierarchyPage';
-import ProductsPage from 'pages/ProductsPage';
+// import ProductsPage from 'pages/ProductsPage';
 import ColorsPage from 'pages/ColorsPage';
 import PricingPage from 'pages/PricingPage';
+import DashboardPage from 'pages/DashboardPage';
 
 // Startup Apps
 // import MainApp from '../../js/components/startup/MainApp';
@@ -26,7 +27,7 @@ const routes = [
   },
   {
     path: '/',
-    render: () => props => <ProductsPage {...props} />,
+    render: () => props => <DashboardPage {...props} />,
   },
 ];
 
