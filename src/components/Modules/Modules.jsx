@@ -4,15 +4,21 @@ import { connect } from 'react-redux';
 import uuidV4 from 'uuid/v4';
 import { fetchComponents, createComponent } from 'actions/components';
 import { uploadItem } from 'actions/uploads';
+import Overlay from 'components/common/Overlay';
 import ModulesDropzone from './ModulesDropzone';
 import AddModulesButton from './AddModulesButton';
 import ModuleList from './ModuleList';
 
 class Modules extends Component {
   static propTypes = {
+    uploading: PropTypes.bool,
     fetchComponents: PropTypes.func.isRequired,
     uploadItem: PropTypes.func.isRequired,
     createComponent: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    uploading: false,
   };
 
   componentWillMount() {
@@ -37,12 +43,14 @@ class Modules extends Component {
   };
 
   render() {
+    const { uploading } = this.props;
     return (
       <ModulesDropzone
         id="modules"
         className="w-screen h-screen md:px-8 sm:px-6 px-3"
         onDrop={this.handleDrop}
       >
+        {uploading && <Overlay>Uploading images...</Overlay>}
         <AddModulesButton />
         <ModuleList />
       </ModulesDropzone>
@@ -50,4 +58,14 @@ class Modules extends Component {
   }
 }
 
-export default connect(null, { fetchComponents, createComponent, uploadItem })(Modules);
+export default connect(
+  (state) => {
+    const anyUploading = state.uploads.get('items').size > 0 && state.uploads
+      .get('items')
+      .some(item => item.get('status') === 'loading');
+    return {
+      uploading: anyUploading,
+    };
+  },
+  { fetchComponents, createComponent, uploadItem },
+)(Modules);

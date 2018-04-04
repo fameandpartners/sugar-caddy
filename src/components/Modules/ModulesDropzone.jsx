@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
+import Overlay from 'components/common/Overlay';
 import DropzoneContext from './DropzoneContext';
-
-const overlayStyle = {
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  padding: '2.5em 0',
-  background: 'rgba(0,0,0,0.5)',
-  textAlign: 'center',
-  color: '#fff',
-};
 
 class ModulesDropzone extends Component {
   static propTypes = {
@@ -53,7 +42,7 @@ class ModulesDropzone extends Component {
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
       >
-        {dropzoneActive && <div style={overlayStyle}>Drop files...</div>}
+        {dropzoneActive && <Overlay>Drop files...</Overlay>}
         <DropzoneContext.Provider value={this.onDropzoneClick}>
           {children}
         </DropzoneContext.Provider>
