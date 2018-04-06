@@ -1,13 +1,11 @@
 import {
-  FETCH_HIERARCHY,
   FETCH_HIERARCHY_LOADING,
   FETCH_HIERARCHY_FAILURE,
   FETCH_HIERARCHY_SUCCESS,
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
 } from 'constants/hierarchy';
-import requestWrapper from 'utils/request-wrapper';
-import { fetchHierarchyApi } from 'requests';
+import firebase from 'utils/firebase';
 
 export const fetchHierarchyLoading = () => ({ type: FETCH_HIERARCHY_LOADING });
 
@@ -21,7 +19,22 @@ export const fetchHierarchySuccess = payload => ({
   payload,
 });
 
-export const fetchHierarchy = requestWrapper(FETCH_HIERARCHY, fetchHierarchyApi);
+export const fetchHierarchy = productId => (dispatch) => {
+  dispatch(fetchHierarchyLoading());
+  return firebase
+    .database()
+    .ref(`hierarchy/${productId}`)
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val();
+      dispatch(fetchHierarchySuccess(data));
+      return data;
+    })
+    .catch((err) => {
+      dispatch(fetchHierarchyFailure(err));
+      return Promise.reject(err);
+    });
+};
 
 export const toggleMode = payload => ({ type: TOGGLE_HIERARCHY_MODE, payload });
 

@@ -1,24 +1,20 @@
 import {
-  FETCH_COMPONENTS,
   FETCH_COMPONENTS_LOADING,
   FETCH_COMPONENTS_FAILURE,
   FETCH_COMPONENTS_SUCCESS,
+  FETCH_HIERARCHY_COMPONENTS_LOADING,
   UPDATE_COMPONENT_LOADING,
   UPDATE_COMPONENT_FAILURE,
   UPDATE_COMPONENT_SUCCESS,
-  ADD_COMPONENT,
+  ADD_COMPONENT_LOADING,
+  ADD_COMPONENT_FAILURE,
+  ADD_COMPONENT_SUCCESS,
   SET_CURRENT_COMPONENT,
   DELETE_COMPONENT_LOADING,
   DELETE_COMPONENT_FAILURE,
   DELETE_COMPONENT_SUCCESS,
 } from 'constants/components';
-import fetch from 'utils/fetch';
-import requestWrapper from 'utils/request-wrapper';
-import {
-  fetchComponentsApi,
-  createComponentApi,
-  deleteComponentApi,
-} from 'requests';
+import firebase from 'utils/firebase';
 
 export const fetchComponentsLoading = () => ({
   type: FETCH_COMPONENTS_LOADING,
@@ -34,10 +30,26 @@ export const fetchComponentsSuccess = payload => ({
   payload,
 });
 
-export const fetchComponents = requestWrapper(
-  FETCH_COMPONENTS,
-  fetchComponentsApi,
-);
+export const fetchComponents = () => (dispatch) => {
+  dispatch(fetchComponentsLoading());
+  return firebase
+    .database()
+    .ref('components')
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val();
+      dispatch(fetchComponentsSuccess(data));
+      return data;
+    })
+    .catch((err) => {
+      dispatch(fetchComponentsFailure(err));
+      return Promise.reject(err);
+    });
+};
+
+export const fetchHierarchyComponentsLoading = () => ({
+  type: FETCH_HIERARCHY_COMPONENTS_LOADING,
+});
 
 export const updateComponentLoading = () => ({
   type: UPDATE_COMPONENT_LOADING,
@@ -53,29 +65,69 @@ export const updateComponentSuccess = payload => ({
   payload,
 });
 
-export function updateComponent(componentId, update) {
-  return (dispatch) => {
-    dispatch(updateComponentLoading());
-    return fetch(`/components/${componentId}.json`, {
-      method: 'PATCH',
-      'content-type': 'Application/json',
-      body: JSON.stringify(update),
+export const updateComponent = (componentId, update) => (dispatch) => {
+  dispatch(updateComponentLoading());
+  return firebase
+    .database()
+    .ref(`/components/${componentId}`)
+    .update(update)
+    .then(() => {
+      dispatch(updateComponentSuccess({ componentId, update }));
+      return update;
     })
-      .then((data) => {
-        dispatch(updateComponentSuccess({ componentId, update: data }));
-        return data;
-      })
-      .catch((err) => {
-        dispatch(updateComponentFailure(err));
-        return Promise.reject(err);
-      });
-  };
-}
+    .catch((err) => {
+      dispatch(updateComponentFailure(err));
+      return Promise.reject(err);
+    });
+};
 
-export const createComponent = requestWrapper(
-  ADD_COMPONENT,
-  createComponentApi,
-);
+export const createComponentLoading = () => ({
+  type: ADD_COMPONENT_LOADING,
+});
+
+export const createComponentFailure = err => ({
+  type: ADD_COMPONENT_FAILURE,
+  payload: err,
+});
+
+export const createComponentSuccess = payload => ({
+  type: ADD_COMPONENT_SUCCESS,
+  payload,
+});
+
+export const createComponent = component => (dispatch) => {
+  dispatch(createComponentLoading());
+  return firebase
+    .database()
+    .ref(`/components/${component.id}`)
+    .set(component)
+    .then(() => {
+      dispatch(createComponentSuccess(component));
+      return component;
+    })
+    .catch((err) => {
+      dispatch(createComponentFailure(err));
+      return Promise.reject(err);
+    });
+};
+
+export const fetchHierarchyComponents = productId => (dispatch) => {
+  const rootRef = firebase.database().ref();
+  const attachedRef = rootRef.child(`/attachedModules/${productId}`);
+  const componentsRef = rootRef.child('components');
+  attachedRef.once('value').then((snapshot) => {
+    const hierKeys = Object.keys(snapshot.val() || {});
+    hierKeys.forEach((hierKey) => {
+      attachedRef.child(hierKey).on('child_added', (snap) => {
+        const compRef = componentsRef.child(snap.key);
+        compRef.once('value').then((snapp) => {
+          const data = Object.assign({}, snapp.val(), { levelId: hierKey });
+          dispatch(createComponentSuccess(data));
+        });
+      });
+    });
+  });
+};
 
 export const setCurrentId = (payload = '') => ({
   type: SET_CURRENT_COMPONENT,
@@ -98,10 +150,13 @@ export const deleteComponentSuccess = payload => ({
 
 export const deleteComponent = componentId => (dispatch) => {
   dispatch(deleteComponentLoading());
-  return deleteComponentApi(componentId)
-    .then((data) => {
+  return firebase
+    .database()
+    .ref(`/components/${componentId}`)
+    .remove()
+    .then(() => {
       dispatch(deleteComponentSuccess(componentId));
-      return data;
+      return componentId;
     })
     .catch((err) => {
       dispatch(deleteComponentFailure(err));
