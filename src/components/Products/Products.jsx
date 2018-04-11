@@ -6,7 +6,6 @@ import { reset } from 'redux-form';
 import classnames from 'classnames';
 import uuidV4 from 'uuid/v4';
 import { fetchProducts, createProduct, setProductMode } from 'actions/products';
-import firebase from 'utils/firebase';
 import ProductHeading from './ProductHeading';
 import ProductList from './ProductList';
 import CreateProductForm from './CreateProductForm';

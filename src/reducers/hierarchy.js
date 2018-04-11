@@ -2,6 +2,9 @@ import {
   FETCH_HIERARCHY_LOADING,
   FETCH_HIERARCHY_FAILURE,
   FETCH_HIERARCHY_SUCCESS,
+  ADD_HIERARCHY_LOADING,
+  ADD_HIERARCHY_FAILURE,
+  ADD_HIERARCHY_SUCCESS,
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
   SET_CURRENT_ID,
@@ -19,15 +22,17 @@ const initialState = fromJS({
 
 export default function hierarchy(state = initialState, { type, payload }) {
   switch (type) {
+  case ADD_HIERARCHY_LOADING:
   case FETCH_HIERARCHY_LOADING:
     return state.set('loading', true);
+  case ADD_HIERARCHY_FAILURE:
   case FETCH_HIERARCHY_FAILURE:
     return state
       .set('loading', false)
       .set('error', 'Error fetching product hierarchy');
   case FETCH_HIERARCHY_SUCCESS:
     return state.merge({
-      data: fromJS(payload),
+      data: fromJS(payload || {}),
       error: '',
       loading: false,
     });
@@ -46,6 +51,9 @@ export default function hierarchy(state = initialState, { type, payload }) {
       const newPath = currentPath.slice(0, order - 1);
       return state.set('currentPath', newPath);
     }
+  }
+  case ADD_HIERARCHY_SUCCESS: {
+    return state.setIn(['data', payload.id], fromJS(payload));
   }
   case SET_CURRENT_ID:
     return state.set('currentId', payload);

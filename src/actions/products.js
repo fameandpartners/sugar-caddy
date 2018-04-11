@@ -2,6 +2,9 @@ import {
   FETCH_PRODUCTS_LOADING,
   FETCH_PRODUCTS_FAILURE,
   FETCH_PRODUCTS_SUCCESS,
+  FETCH_PRODUCT_LOADING,
+  FETCH_PRODUCT_FAILURE,
+  FETCH_PRODUCT_SUCCESS,
   ADD_PRODUCT_LOADING,
   ADD_PRODUCT_FAILURE,
   ADD_PRODUCT_SUCCESS,
@@ -40,6 +43,37 @@ export const fetchProducts = () => (dispatch) => {
     })
     .catch((err) => {
       dispatch(fetchProductsFailure(err));
+      return Promise.reject(err);
+    });
+};
+
+export const fetchProductLoading = () => ({
+  type: FETCH_PRODUCT_LOADING,
+});
+
+export const fetchProductFailure = err => ({
+  type: FETCH_PRODUCT_FAILURE,
+  payload: err,
+});
+
+export const fetchProductSuccess = payload => ({
+  type: FETCH_PRODUCT_SUCCESS,
+  payload,
+});
+
+export const fetchProduct = productId => (dispatch) => {
+  dispatch(fetchProductLoading());
+  return firebase
+    .database()
+    .ref(`products/${productId}`)
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val();
+      dispatch(fetchProductSuccess(data));
+      return data;
+    })
+    .catch((err) => {
+      dispatch(fetchProductFailure(err));
       return Promise.reject(err);
     });
 };

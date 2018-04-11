@@ -1,0 +1,15 @@
+.TextInput {
+  @apply .bg-grey-lighter .appearance-none .border-2 .rounded-sm .w-full .p-2 .text-grey-darker .border-grey-lighter;
+}
+
+.TextInput:hover {
+  @apply .border-purple;
+}
+
+.TextInput--error {
+  @apply .border-red;
+}
+
+.TextInput--error:hover {
+  @apply .border-red-dark;
+}

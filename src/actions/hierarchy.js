@@ -2,6 +2,9 @@ import {
   FETCH_HIERARCHY_LOADING,
   FETCH_HIERARCHY_FAILURE,
   FETCH_HIERARCHY_SUCCESS,
+  ADD_HIERARCHY_LOADING,
+  ADD_HIERARCHY_FAILURE,
+  ADD_HIERARCHY_SUCCESS,
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
 } from 'constants/hierarchy';
@@ -42,6 +45,36 @@ export const updateCurrentPath = payload => ({
   type: UPDATE_CURRENT_PATH,
   payload,
 });
+
+export const createHierarchyLoading = () => ({
+  type: ADD_HIERARCHY_LOADING,
+});
+
+export const createHierarchyFailure = err => ({
+  type: ADD_HIERARCHY_FAILURE,
+  payload: err,
+});
+
+export const createHierarchySuccess = payload => ({
+  type: ADD_HIERARCHY_SUCCESS,
+  payload,
+});
+
+export const createHierarchy = (productId, level) => (dispatch) => {
+  dispatch(createHierarchyLoading());
+  return firebase
+    .database()
+    .ref(`hierarchy/${productId}/${level.id}`)
+    .set(level)
+    .then(() => {
+      dispatch(createHierarchySuccess(level));
+      return level;
+    })
+    .catch((err) => {
+      dispatch(createHierarchyFailure(err));
+      return Promise.reject(err);
+    });
+};
 
 export default {
   fetchHierarchy,

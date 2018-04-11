@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { fetchProduct, setCurrentId } from 'actions/products';
 import { fetchHierarchy } from 'actions/hierarchy';
 import { fetchHierarchyComponents } from 'actions/components';
 import Hierarchy from 'components/Hierarchy';
 import HierarchyHeader from 'components/HierarchyHeader';
-
 
 class HierarchyPage extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
     fetchHierarchy: PropTypes.func.isRequired,
     fetchHierarchyComponents: PropTypes.func.isRequired,
+    fetchProduct: PropTypes.func.isRequired,
+    setProductId: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
     const { match: { params: { productId } } } = this.props;
     this.props.fetchHierarchy(productId);
     this.props.fetchHierarchyComponents(productId);
+    this.props
+      .fetchProduct(productId)
+      .then(() => this.props.setProductId(productId));
   }
 
   render() {
@@ -33,4 +38,6 @@ class HierarchyPage extends Component {
 export default connect(null, {
   fetchHierarchy,
   fetchHierarchyComponents,
+  fetchProduct,
+  setProductId: setCurrentId,
 })(HierarchyPage);

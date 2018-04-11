@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import HierarchyLevel from './HierarchyLevel';
+import CreateHierarchyForm from './CreateHierarchyForm';
 
 const Hierarchy = ({ hierarchy }) => (
   <div id="hierarchy" className="container my-8">
@@ -12,6 +13,7 @@ const Hierarchy = ({ hierarchy }) => (
       .map(level => (
         <HierarchyLevel key={level.get('name')} level={level} />
       ))}
+    <CreateHierarchyForm />
   </div>
 );
 

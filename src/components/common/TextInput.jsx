@@ -9,6 +9,7 @@ const propTypes = {
   meta: PropTypes.object.isRequired,
   onKeyPress: PropTypes.func,
   className: PropTypes.string,
+  inputClassName: PropTypes.string,
   style: PropTypes.object,
 };
 
@@ -16,6 +17,7 @@ const defaultProps = {
   placeholder: '',
   onKeyPress: () => {},
   className: '',
+  inputClassName: '',
   style: {},
 };
 
@@ -26,15 +28,16 @@ const TextInput = ({
   meta: { touched, error },
   placeholder,
   className,
+  inputClassName,
 }) => (
   <div className={classnames(className)}>
     <input
       className={classnames(
-        'bg-grey-lighter appearance-none border-2 rounded-sm w-full p-2 text-grey-darker',
+        'TextInput',
         {
-          'border-grey-lighter hover:border-purple': !(touched && error),
-          'border-red hover:border-red-dark': touched && error,
+          'TextInput--error': touched && error,
         },
+        inputClassName,
       )}
       id="inline-full-name"
       type={type}
