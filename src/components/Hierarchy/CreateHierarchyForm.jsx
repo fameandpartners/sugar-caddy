@@ -23,10 +23,8 @@ const CreateHierarchyForm = ({
   order,
 }) => {
   const handleHierarchySubmit = (data) => {
-    console.log('data', data, productId);
     const id = uuidV4();
     const hierarchy = Object.assign({}, data, { id, order });
-    console.log(productId, hierarchy);
     createHierarchy(productId, hierarchy);
     reset();
   };

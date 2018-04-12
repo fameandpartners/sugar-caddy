@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomizationLane from './CustomizationLane';
+import LevelName from './LevelName';
 
 const propTypes = {
   level: PropTypes.object.isRequired,
@@ -8,7 +9,7 @@ const propTypes = {
 
 const HierarchyLevel = ({ level }) => (
   <div className="text-left mb-6">
-    <div className="text-lg font-semibold">{level.get('name')}</div>
+    <LevelName levelId={level.get('id')} value={level.get('name')} />
     <CustomizationLane order={level.get('order')} levelId={level.get('id')} />
   </div>
 );

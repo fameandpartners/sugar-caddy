@@ -8,12 +8,14 @@ const propTypes = {
   placeholder: PropTypes.string,
   meta: PropTypes.object.isRequired,
   onKeyPress: PropTypes.func,
+  inputRef: PropTypes.func,
   className: PropTypes.string,
   inputClassName: PropTypes.string,
   style: PropTypes.object,
 };
 
 const defaultProps = {
+  inputRef: () => {},
   placeholder: '',
   onKeyPress: () => {},
   className: '',
@@ -27,6 +29,7 @@ const TextInput = ({
   onKeyPress,
   meta: { touched, error },
   placeholder,
+  inputRef,
   className,
   inputClassName,
 }) => (
@@ -40,6 +43,7 @@ const TextInput = ({
         inputClassName,
       )}
       id="inline-full-name"
+      ref={inputRef}
       type={type}
       {...input}
       placeholder={placeholder}
