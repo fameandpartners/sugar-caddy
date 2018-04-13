@@ -30,7 +30,10 @@ const AddModulesModal = ({
         </div>
       </div>
     </div>
-    <ModulesList levelId={currentLevel.get('id')} />
+    <ModulesList
+      levelId={currentLevel.get('id')}
+      attachedModules={currentLevel.get('attachedModules')}
+    />
     <div className="flex justify-end">
       <button className="btn btn-primary" onClick={onSave}>
         Done

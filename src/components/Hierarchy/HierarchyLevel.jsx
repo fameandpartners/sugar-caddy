@@ -10,7 +10,7 @@ const propTypes = {
 const HierarchyLevel = ({ level }) => (
   <div className="text-left mb-6">
     <LevelName levelId={level.get('id')} value={level.get('name')} order={level.get('order')} />
-    <CustomizationLane order={level.get('order')} levelId={level.get('id')} />
+    <CustomizationLane order={level.get('order')} levelId={level.get('id')} attachedModules={level.get('attachedModules')} />
   </div>
 );
 

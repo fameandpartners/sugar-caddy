@@ -14,6 +14,14 @@ import {
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
   SET_CURRENT_HIERARCHY,
+  FETCH_ATTACHMENTS_LOADING,
+  FETCH_ATTACHMENTS_FAILURE,
+  FETCH_ATTACHMENTS_SUCCESS,
+  UPDATE_ATTACHMENTS_LOADING,
+  UPDATE_ATTACHMENTS_FAILURE,
+  UPDATE_ATTACHMENTS_SUCCESS,
+  ADD_ATTACHMENT_CLIENT,
+  DELETE_ATTACHMENT_CLIENT,
 } from 'constants/hierarchy';
 import { fromJS } from 'immutable';
 
@@ -32,11 +40,15 @@ export default function hierarchy(state = initialState, { type, payload }) {
   case UPDATE_HIERARCHY_LOADING:
   case DELETE_HIERARCHY_LOADING:
   case FETCH_HIERARCHY_LOADING:
+  case FETCH_ATTACHMENTS_LOADING:
+  case UPDATE_ATTACHMENTS_LOADING:
     return state.set('loading', true);
   case ADD_HIERARCHY_FAILURE:
   case UPDATE_HIERARCHY_FAILURE:
   case DELETE_HIERARCHY_FAILURE:
   case FETCH_HIERARCHY_FAILURE:
+  case FETCH_ATTACHMENTS_FAILURE:
+  case UPDATE_ATTACHMENTS_FAILURE:
     return state
       .set('loading', false)
       .set('error', 'Error fetching product hierarchy');
@@ -74,6 +86,34 @@ export default function hierarchy(state = initialState, { type, payload }) {
       value.filter((_, key) => key !== payload));
   case SET_CURRENT_HIERARCHY:
     return state.set('currentId', payload);
+  case FETCH_ATTACHMENTS_SUCCESS:
+    return state
+      .update('data', data =>
+        data.map(level =>
+          level.set(
+            'attachedModules',
+            fromJS(payload[level.get('id')] || {}),
+          )))
+      .set('error', '')
+      .set('loading', false);
+  case ADD_ATTACHMENT_CLIENT: {
+    const { levelId, componentId } = payload;
+    return state.setIn(
+      ['data', levelId, 'attachedModules', componentId],
+      false,
+    );
+  }
+  case DELETE_ATTACHMENT_CLIENT: {
+    const { levelId, componentId } = payload;
+    return state.deleteIn(['data', levelId, 'attachedModules', componentId]);
+  }
+  case UPDATE_ATTACHMENTS_SUCCESS: {
+    const { levelId, update } = payload;
+    return state
+      .setIn(['data', levelId, 'attachedModules'], fromJS(update))
+      .set('error', '')
+      .set('loading', false);
+  }
   default:
     return state;
   }

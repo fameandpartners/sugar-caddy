@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import qs from 'querystring';
 import { connect } from 'react-redux';
 import { fetchProduct, setCurrentId } from 'actions/products';
-import { fetchHierarchy } from 'actions/hierarchy';
-import { fetchComponents, fetchAttachments } from 'actions/components';
+import { fetchHierarchy, fetchAttachments } from 'actions/hierarchy';
+import { fetchComponents } from 'actions/components';
 import Hierarchy from 'components/Hierarchy';
 import HierarchyHeader from 'components/HierarchyHeader';
 

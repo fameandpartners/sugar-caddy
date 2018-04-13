@@ -4,18 +4,22 @@ import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import Module from 'components/common/Module';
-import { updateComponentSuccess } from 'actions/components';
+import { addAttachmentClient, deleteAttachmentClient } from 'actions/hierarchy';
 
 const propTypes = {
   components: PropTypes.instanceOf(Immutable.Map).isRequired,
+  attachedModules: PropTypes.instanceOf(Immutable.Map).isRequired,
   levelId: PropTypes.string.isRequired,
-  updateComponentSuccess: PropTypes.func.isRequired,
+  addAttachmentClient: PropTypes.func.isRequired,
+  deleteAttachmentClient: PropTypes.func.isRequired,
 };
 
 const ModulesList = ({
   components,
   levelId,
-  updateComponentSuccess: updateComponent,
+  attachedModules,
+  deleteAttachmentClient: deleteAttachment,
+  addAttachmentClient: addAttachment,
 }) => (
   <div
     id="module-list"
@@ -27,15 +31,14 @@ const ModulesList = ({
         id={custom.get('id')}
         key={custom.get('id')}
         className={classnames('m-3', {
-          'border-2 border-blue': custom.get('levelId') === levelId,
+          'border-2 border-blue': attachedModules.has(custom.get('id')),
         })}
         name={custom.get('name')}
         image={custom.get('image')}
         onClick={() =>
-          updateComponent({
-            componentId: custom.get('id'),
-            update: { levelId: custom.get('levelId') === levelId ? '' : levelId },
-          })
+          (attachedModules.has(custom.get('id'))
+            ? deleteAttachment({ levelId, componentId: custom.get('id') })
+            : addAttachment({ levelId, componentId: custom.get('id') }))
         }
         tags={custom.get('tags')}
         incompatibilities={custom.get('incompatibilities')}
@@ -50,5 +53,5 @@ export default connect(
   state => ({
     components: state.components.get('data'),
   }),
-  { updateComponentSuccess },
+  { addAttachmentClient, deleteAttachmentClient },
 )(ModulesList);

@@ -14,6 +14,14 @@ import {
   SET_CURRENT_HIERARCHY,
   TOGGLE_HIERARCHY_MODE,
   UPDATE_CURRENT_PATH,
+  FETCH_ATTACHMENTS_LOADING,
+  FETCH_ATTACHMENTS_FAILURE,
+  FETCH_ATTACHMENTS_SUCCESS,
+  UPDATE_ATTACHMENTS_LOADING,
+  UPDATE_ATTACHMENTS_FAILURE,
+  UPDATE_ATTACHMENTS_SUCCESS,
+  ADD_ATTACHMENT_CLIENT,
+  DELETE_ATTACHMENT_CLIENT,
 } from 'constants/hierarchy';
 import firebase from 'utils/firebase';
 
@@ -147,6 +155,76 @@ export const deleteHierarchy = (productId, levelId) => (dispatch) => {
       return Promise.reject(err);
     });
 };
+
+export const fetchAttachmentsLoading = () => ({
+  type: FETCH_ATTACHMENTS_LOADING,
+});
+
+export const fetchAttachmentsFailure = err => ({
+  type: FETCH_ATTACHMENTS_FAILURE,
+  payload: err,
+});
+
+export const fetchAttachmentsSuccess = payload => ({
+  type: FETCH_ATTACHMENTS_SUCCESS,
+  payload,
+});
+
+export const fetchAttachments = productId => (dispatch) => {
+  dispatch(fetchAttachmentsLoading());
+  return firebase
+    .database()
+    .ref(`attachedModules/${productId}`)
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val() || {};
+      dispatch(fetchAttachmentsSuccess(data));
+      return data;
+    })
+    .catch((err) => {
+      dispatch(fetchAttachmentsFailure(err));
+    });
+};
+
+export const updateAttachmentsLoading = () => ({
+  type: UPDATE_ATTACHMENTS_LOADING,
+});
+
+export const updateAttachmentsFailure = err => ({
+  type: UPDATE_ATTACHMENTS_FAILURE,
+  payload: err,
+});
+
+export const updateAttachmentsSuccess = payload => ({
+  type: UPDATE_ATTACHMENTS_SUCCESS,
+  payload,
+});
+
+export const updateAttachments = (productId, levelId, update) => (dispatch) => {
+  dispatch(updateAttachmentsLoading());
+  return firebase
+    .database()
+    .ref(`attachedModules/${productId}/${levelId}`)
+    .set(update)
+    .then(() => {
+      dispatch(updateAttachmentsSuccess({ levelId, update }));
+      return update;
+    })
+    .catch((err) => {
+      dispatch(updateAttachmentsFailure(err));
+      return Promise.reject(err);
+    });
+};
+
+export const addAttachmentClient = payload => ({
+  type: ADD_ATTACHMENT_CLIENT,
+  payload,
+});
+
+export const deleteAttachmentClient = payload => ({
+  type: DELETE_ATTACHMENT_CLIENT,
+  payload,
+});
 
 export default {
   fetchHierarchy,

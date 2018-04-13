@@ -12,11 +12,18 @@ class CustomizationLane extends PureComponent {
   static propTypes = {
     levelId: PropTypes.string.isRequired,
     order: PropTypes.number.isRequired,
+    attachedModules: PropTypes.instanceOf(Immutable.Map),
     mode: PropTypes.string.isRequired,
     currentPath: PropTypes.instanceOf(Immutable.List).isRequired,
     components: PropTypes.instanceOf(Immutable.Map).isRequired,
     showModal: PropTypes.func.isRequired,
     setCurrentHierarchy: PropTypes.func.isRequired,
+    compLoading: PropTypes.bool.isRequired,
+    hierLoading: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    attachedModules: Immutable.Map(),
   };
 
   spawnModal = () => {
@@ -80,25 +87,42 @@ class CustomizationLane extends PureComponent {
     </div>
   );
 
+  renderMiniAddButton = () => (
+    <div className="flex justify-end mb-3">
+      <button className="btn btn-link p-0" onClick={this.spawnModal}>
+        Add Modules
+      </button>
+    </div>
+  );
+
+  renderLoading = () => (
+    <div id="customization-lane" className="my-4 text-center">
+      Loading ...
+    </div>
+  );
+
   render() {
-    const { levelId, mode, components } = this.props;
-    const customizations = components
-      .toList()
-      .filter(item => item.get('levelId') === levelId);
+    const {
+      mode,
+      components,
+      attachedModules,
+      compLoading,
+      hierLoading,
+    } = this.props;
+    const loading = compLoading || hierLoading;
+
+    const customizations = attachedModules
+      .map((val, key) => components.get(key).set('preview', val))
+      .toList();
 
     const hasCustomizations = customizations.size > 0;
     const addMode = mode === 'add';
 
+    if (loading) return this.renderLoading();
+
     return (
       <div id="customization-lane">
-        {addMode &&
-          hasCustomizations && (
-            <div className="flex justify-end mb-3">
-              <button className="btn btn-link p-0" onClick={this.spawnModal}>
-                Add Modules
-              </button>
-            </div>
-          )}
+        {addMode && hasCustomizations && this.renderMiniAddButton()}
         {addMode && !hasCustomizations
           ? this.renderAddModules()
           : this.renderCustomizations(customizations)}
@@ -115,6 +139,8 @@ export default connect(
       mode,
       currentPath: state.hierarchy.get('currentPath'),
       components: state.components.get('data'),
+      compLoading: state.components.get('loading'),
+      hierLoading: state.hierarchy.get('loading'),
     };
   },
   { showModal, setCurrentHierarchy },
