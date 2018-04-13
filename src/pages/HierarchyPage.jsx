@@ -7,6 +7,7 @@ import { fetchHierarchy, fetchAttachments } from 'actions/hierarchy';
 import { fetchComponents } from 'actions/components';
 import Hierarchy from 'components/Hierarchy';
 import HierarchyHeader from 'components/HierarchyHeader';
+import HierarchyPreview from 'components/Hierarchy/Preview';
 
 class HierarchyPage extends Component {
   static propTypes = {
@@ -38,10 +39,12 @@ class HierarchyPage extends Component {
   }
 
   render() {
+    const { location: { search } } = this.props;
+    const { mode } = qs.parse(search.slice(1));
     return (
       <div>
         <HierarchyHeader />
-        <Hierarchy />
+        {mode === 'preview' ? <HierarchyPreview /> : <Hierarchy />}
       </div>
     );
   }
