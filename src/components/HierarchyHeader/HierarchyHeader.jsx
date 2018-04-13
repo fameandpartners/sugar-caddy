@@ -32,7 +32,7 @@ const HierarchyHeader = ({ mode, currentProduct }) => (
         {currentProduct.get('name') ? `${currentProduct.get('code')}: ${currentProduct.get('name')}` : ''}
       </div>
     </div>
-    <div className="py-6 px-8 border-t border-b border-grey-darkest bg-grey">
+    <div className="py-6 px-8 border-b border-grey-darkest bg-grey">
       <ModeLink to="add" active={mode === 'add'}>
         Add Modules
       </ModeLink>

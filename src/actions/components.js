@@ -2,10 +2,15 @@ import {
   FETCH_COMPONENTS_LOADING,
   FETCH_COMPONENTS_FAILURE,
   FETCH_COMPONENTS_SUCCESS,
-  FETCH_HIERARCHY_COMPONENTS_LOADING,
+  FETCH_ATTACHMENTS_LOADING,
+  FETCH_ATTACHMENTS_FAILURE,
+  FETCH_ATTACHMENTS_SUCCESS,
   UPDATE_COMPONENT_LOADING,
   UPDATE_COMPONENT_FAILURE,
   UPDATE_COMPONENT_SUCCESS,
+  UPDATE_ATTACHMENTS_LOADING,
+  UPDATE_ATTACHMENTS_FAILURE,
+  UPDATE_ATTACHMENTS_SUCCESS,
   ADD_COMPONENT_LOADING,
   ADD_COMPONENT_FAILURE,
   ADD_COMPONENT_SUCCESS,
@@ -46,10 +51,6 @@ export const fetchComponents = () => (dispatch) => {
       return Promise.reject(err);
     });
 };
-
-export const fetchHierarchyComponentsLoading = () => ({
-  type: FETCH_HIERARCHY_COMPONENTS_LOADING,
-});
 
 export const updateComponentLoading = () => ({
   type: UPDATE_COMPONENT_LOADING,
@@ -111,22 +112,61 @@ export const createComponent = component => (dispatch) => {
     });
 };
 
-export const fetchHierarchyComponents = productId => (dispatch) => {
-  const rootRef = firebase.database().ref();
-  const attachedRef = rootRef.child(`/attachedModules/${productId}`);
-  const componentsRef = rootRef.child('components');
-  attachedRef.once('value').then((snapshot) => {
-    const hierKeys = Object.keys(snapshot.val() || {});
-    hierKeys.forEach((hierKey) => {
-      attachedRef.child(hierKey).on('child_added', (snap) => {
-        const compRef = componentsRef.child(snap.key);
-        compRef.once('value').then((snapp) => {
-          const data = Object.assign({}, snapp.val(), { levelId: hierKey });
-          dispatch(createComponentSuccess(data));
-        });
-      });
+export const fetchAttachmentsLoading = () => ({
+  type: FETCH_ATTACHMENTS_LOADING,
+});
+
+export const fetchAttachmentsFailure = err => ({
+  type: FETCH_ATTACHMENTS_FAILURE,
+  payload: err,
+});
+
+export const fetchAttachmentsSuccess = payload => ({
+  type: FETCH_ATTACHMENTS_SUCCESS,
+  payload,
+});
+
+export const fetchAttachments = productId => (dispatch) => {
+  dispatch(fetchAttachmentsLoading());
+  return firebase
+    .database()
+    .ref(`attachedModules/${productId}`)
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val() || {};
+      dispatch(fetchAttachmentsSuccess(data));
+      return data;
+    })
+    .catch((err) => {
+      dispatch(fetchAttachmentsFailure(err));
     });
-  });
+};
+
+export const updateAttachmentsLoading = () => ({
+  type: UPDATE_ATTACHMENTS_LOADING,
+});
+
+export const updateAttachmentsFailure = err => ({
+  type: UPDATE_ATTACHMENTS_FAILURE,
+  payload: err,
+});
+
+export const updateAttachmentsSuccess = payload => ({
+  type: UPDATE_ATTACHMENTS_SUCCESS,
+  payload,
+});
+
+export const updateAttachments = (productId, levelId, update) => (dispatch) => {
+  dispatch(updateAttachmentsLoading());
+  return firebase
+    .database()
+    .ref(`attachedModules/${productId}/${levelId}`)
+    .set(update)
+    .then(() => update)
+    .catch((err) => {
+      dispatch(updateAttachmentsFailure(err));
+      return Promise.reject(err);
+    });
 };
 
 export const setCurrentId = (payload = '') => ({

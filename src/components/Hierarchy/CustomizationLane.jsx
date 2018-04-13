@@ -1,75 +1,121 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import intersection from 'lodash/intersection';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
+import qs from 'querystring';
+import { showModal } from 'actions/modals';
+import { setCurrentHierarchy } from 'actions/hierarchy';
 import Customization from './Customization';
 
-const propTypes = {
-  levelId: PropTypes.string.isRequired,
-  order: PropTypes.number.isRequired,
-  mode: PropTypes.string.isRequired,
-  currentPath: PropTypes.instanceOf(Immutable.List).isRequired,
-  components: PropTypes.instanceOf(Immutable.Map).isRequired,
-};
+class CustomizationLane extends PureComponent {
+  static propTypes = {
+    levelId: PropTypes.string.isRequired,
+    order: PropTypes.number.isRequired,
+    mode: PropTypes.string.isRequired,
+    currentPath: PropTypes.instanceOf(Immutable.List).isRequired,
+    components: PropTypes.instanceOf(Immutable.Map).isRequired,
+    showModal: PropTypes.func.isRequired,
+    setCurrentHierarchy: PropTypes.func.isRequired,
+  };
 
-const CustomizationLane = ({
-  levelId,
-  order,
-  mode,
-  currentPath,
-  components,
-}) => {
-  const customizations = components
-    .toList()
-    .filter(item => item.get('levelId') === levelId);
-  const currentTags = currentPath
-    .slice(0, order - 1)
-    .reduce(
-      (acc, curr) =>
-        acc.concat(components.getIn([curr, 'tags']).toArray() || []),
-      [],
+  spawnModal = () => {
+    const { levelId } = this.props;
+    this.props.setCurrentHierarchy(levelId);
+    this.props.showModal('AddModulesModal');
+  };
+
+  renderCustomizations = (customizations) => {
+    const {
+      currentPath, order, components, mode,
+    } = this.props;
+    const currentTags = currentPath
+      .slice(0, order - 1)
+      .reduce(
+        (acc, curr) =>
+          acc.concat(components.getIn([curr, 'tags']).toArray() || []),
+        [],
+      );
+    return (
+      <div
+        id="customizations"
+        className="flex bg-grey-light overflow-x-auto p-2"
+      >
+        {customizations.map((custom) => {
+          const tagIntersect = intersection(
+            currentTags,
+            (custom.get('tags') || Immutable.List()).toArray(),
+          );
+          const incompIntersect = intersection(
+            currentTags,
+            (custom.get('incompatibilities') || Immutable.List()).toArray(),
+          );
+          return (
+            <Customization
+              key={custom.get('id')}
+              order={order}
+              customization={custom}
+              mode={mode}
+              disabled={
+                mode === 'view' &&
+                !!currentTags.length &&
+                (!tagIntersect.length || !!incompIntersect.length)
+              }
+              selected={
+                mode === 'view' &&
+                custom.get('id') === currentPath.get(order - 1)
+              }
+            />
+          );
+        })}
+      </div>
     );
+  };
 
-  return (
-    <div
-      id="customization-lane"
-      className="flex bg-grey-light overflow-x-auto p-2"
-    >
-      {customizations.map((custom) => {
-        const tagIntersect = intersection(
-          currentTags,
-          (custom.get('tags') || Immutable.List()).toArray(),
-        );
-        const incompIntersect = intersection(
-          currentTags,
-          (custom.get('incompatibilities') || Immutable.List()).toArray(),
-        );
-        return (
-          <Customization
-            key={custom.get('id')}
-            order={order}
-            customization={custom}
-            mode={mode}
-            disabled={
-              mode === 'view' &&
-              !!currentTags.length &&
-              (!tagIntersect.length || !!incompIntersect.length)
-            }
-            selected={
-              mode === 'view' && custom.get('id') === currentPath.get(order - 1)
-            }
-          />
-        );
-      })}
+  renderAddModules = () => (
+    <div id="add-modules" className="flex justify-center py-8">
+      <button className="btn btn-primary" onClick={this.spawnModal}>
+        + Add Modules
+      </button>
     </div>
   );
-};
 
-CustomizationLane.propTypes = propTypes;
+  render() {
+    const { levelId, mode, components } = this.props;
+    const customizations = components
+      .toList()
+      .filter(item => item.get('levelId') === levelId);
 
-export default connect(state => ({
-  mode: state.hierarchy.get('mode'),
-  currentPath: state.hierarchy.get('currentPath'),
-  components: state.components.get('data'),
-}))(CustomizationLane);
+    const hasCustomizations = customizations.size > 0;
+    const addMode = mode === 'add';
+
+    return (
+      <div id="customization-lane">
+        {addMode &&
+          hasCustomizations && (
+            <div className="flex justify-end mb-3">
+              <button className="btn btn-link p-0" onClick={this.spawnModal}>
+                Add Modules
+              </button>
+            </div>
+          )}
+        {addMode && !hasCustomizations
+          ? this.renderAddModules()
+          : this.renderCustomizations(customizations)}
+      </div>
+    );
+  }
+}
+
+export default connect(
+  (state) => {
+    const { search } = state.router.location;
+    const { mode } = qs.parse(search.slice(1));
+    return {
+      mode,
+      currentPath: state.hierarchy.get('currentPath'),
+      components: state.components.get('data'),
+    };
+  },
+  { showModal, setCurrentHierarchy },
+)(CustomizationLane);

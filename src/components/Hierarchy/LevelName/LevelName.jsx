@@ -11,6 +11,7 @@ class LevelName extends Component {
     value: PropTypes.string.isRequired,
     productId: PropTypes.string.isRequired,
     levelId: PropTypes.string.isRequired,
+    order: PropTypes.number.isRequired,
     updateHierarchy: PropTypes.func.isRequired,
     showModal: PropTypes.func.isRequired,
     setCurrentHierarchy: PropTypes.func.isRequired,
@@ -37,7 +38,7 @@ class LevelName extends Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { value, order } = this.props;
     const { editMode, hover } = this.state;
     return (
       <div
@@ -58,10 +59,10 @@ class LevelName extends Component {
         ) : (
           <div
             role="presentation"
-            className="py-2 my-2 px-8 border border-transparent hover:bg-grey-lighter hover:border-grey-darkest"
+            className="py-2 px-8 border border-transparent hover:bg-grey-lighter hover:border-grey-darkest"
             onClick={this.toggleEditMode(true)}
           >
-            {value}
+            Level {order}: {value}
           </div>
         )}
         <div className="flex-1 flex items-center">
@@ -72,7 +73,7 @@ class LevelName extends Component {
           {hover && (
             <div
               role="presentation"
-              className="mx-2 w-6 h-6 flex justify-center items-center cursor-pointer border border-grey-darkest rounded-full hover:text-red-light hover:border-red-light"
+              className="mx-2 w-6 h-6 flex justify-center items-center cursor-pointer border border-grey-darkest rounded-full hover:text-grey-dark hover:border-grey-dark"
               style={{ width: '1.25rem', height: '1.25rem' }}
               onClick={this.handleDelete}
             >

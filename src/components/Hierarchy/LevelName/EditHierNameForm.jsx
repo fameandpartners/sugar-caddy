@@ -34,7 +34,6 @@ class EditHierNameForm extends Component {
           name="name"
           type="text"
           component={TextInput}
-          className="my-2"
           inputClassName="border-grey-darker hover:border-grey-darker rounded-none border"
           onBlur={onClose}
         />

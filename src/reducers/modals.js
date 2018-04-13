@@ -16,7 +16,7 @@ export default function modals(state = initialState, { type, payload }) {
   case HIDE_MODAL:
     return initialState;
   case ADD_MODAL_STYLES:
-    return state.set('styles', payload);
+    return state.set('styles', fromJS(payload));
   default:
     return state;
   }
