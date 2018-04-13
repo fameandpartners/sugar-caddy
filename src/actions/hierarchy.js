@@ -22,6 +22,9 @@ import {
   UPDATE_ATTACHMENTS_SUCCESS,
   ADD_ATTACHMENT_CLIENT,
   DELETE_ATTACHMENT_CLIENT,
+  SET_ATTACHMENT_LOADING,
+  SET_ATTACHMENT_FAILURE,
+  SET_ATTACHMENT_SUCCESS,
 } from 'constants/hierarchy';
 import firebase from 'utils/firebase';
 
@@ -225,6 +228,41 @@ export const deleteAttachmentClient = payload => ({
   type: DELETE_ATTACHMENT_CLIENT,
   payload,
 });
+
+export const setAttachmentLoading = () => ({
+  type: SET_ATTACHMENT_LOADING,
+});
+
+export const setAttachmentFailure = err => ({
+  type: SET_ATTACHMENT_FAILURE,
+  payload: err,
+});
+
+export const setAttachmentSuccess = payload => ({
+  type: SET_ATTACHMENT_SUCCESS,
+  payload,
+});
+
+export const setAttachment = (
+  productId,
+  levelId,
+  moduleId,
+  value,
+) => (dispatch) => {
+  dispatch(setAttachmentLoading());
+  return firebase
+    .database()
+    .ref(`attachedModules/${productId}/${levelId}/${moduleId}`)
+    .set(value)
+    .then(() => {
+      dispatch(setAttachmentSuccess({ levelId, moduleId, value }));
+      return value;
+    })
+    .catch((err) => {
+      dispatch(setAttachmentFailure(err));
+      return Promise.reject(err);
+    });
+};
 
 export default {
   fetchHierarchy,

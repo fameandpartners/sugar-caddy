@@ -51,7 +51,7 @@ class CustomizationLane extends PureComponent {
         {customizations.map((custom) => {
           const tagIntersect = intersection(
             currentTags,
-            (custom.get('tags') || Immutable.List()).toArray(),
+            custom.get('tags', Immutable.List()).toArray(),
           );
           const incompIntersect = intersection(
             currentTags,

@@ -22,6 +22,8 @@ import {
   UPDATE_ATTACHMENTS_SUCCESS,
   ADD_ATTACHMENT_CLIENT,
   DELETE_ATTACHMENT_CLIENT,
+  SET_ATTACHMENT_FAILURE,
+  SET_ATTACHMENT_SUCCESS,
 } from 'constants/hierarchy';
 import { fromJS } from 'immutable';
 
@@ -49,6 +51,7 @@ export default function hierarchy(state = initialState, { type, payload }) {
   case FETCH_HIERARCHY_FAILURE:
   case FETCH_ATTACHMENTS_FAILURE:
   case UPDATE_ATTACHMENTS_FAILURE:
+  case SET_ATTACHMENT_FAILURE:
     return state
       .set('loading', false)
       .set('error', 'Error fetching product hierarchy');
@@ -113,6 +116,10 @@ export default function hierarchy(state = initialState, { type, payload }) {
       .setIn(['data', levelId, 'attachedModules'], fromJS(update))
       .set('error', '')
       .set('loading', false);
+  }
+  case SET_ATTACHMENT_SUCCESS: {
+    const { levelId, moduleId, value } = payload;
+    return state.setIn(['data', levelId, 'attachedModules', moduleId], value);
   }
   default:
     return state;

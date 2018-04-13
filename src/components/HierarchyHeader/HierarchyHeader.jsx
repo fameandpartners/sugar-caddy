@@ -18,7 +18,7 @@ const defaultProps = {
 
 const HierarchyHeader = ({ mode, currentProduct }) => (
   <Fragment>
-    <div className="bg-grey border-b border-grey-darkest px-8 py-3 flex items-center">
+    <div className="bg-grey border-b border-grey-darkest px-8 py-2 flex items-center">
       <div className="w-1/3 flex">
         <Link
           to="/?tab=products"

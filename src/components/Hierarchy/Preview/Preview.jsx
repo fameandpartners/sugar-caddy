@@ -1,11 +1,11 @@
 import React from 'react';
 import PreviewBar from './PreviewBar';
-import PreviewModule from './PreviewModule';
+import PreviewBody from './PreviewBody';
 
 const Preview = () => (
   <div id="preview">
     <PreviewBar />
-    <PreviewModule />
+    <PreviewBody />
   </div>
 );
 

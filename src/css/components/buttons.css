@@ -22,6 +22,22 @@ button.btn-link {
   @apply .bg-blue-dark;
 }
 
+.btn-primary-inverse {
+  @apply .border .border-blue .bg-transparent;
+}
+
+.btn-primary-inverse:hover {
+  @apply .underline;
+}
+
+.btn-primary-inverse-disabled {
+  @apply .cursor-not-allowed .border-blue-light;
+}
+
+.btn-primary-inverse-disabled:hover {
+  @apply .no-underline;
+}
+
 .btn-error {
   @apply .text-white .bg-red;
 }
