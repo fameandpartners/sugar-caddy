@@ -3,3 +3,4 @@ export hierarchy from './hierarchy';
 export products from './products';
 export modals from './modals';
 export uploads from './uploads';
+export drawers from './drawers';

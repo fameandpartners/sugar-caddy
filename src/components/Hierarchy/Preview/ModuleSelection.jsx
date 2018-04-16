@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Module from 'components/common/Module';
 import intersection from 'lodash/intersection';
+import { openDrawer } from 'actions/drawers';
 
 const propTypes = {
   modules: PropTypes.instanceOf(Immutable.List).isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
-const ModuleSelection = ({ modules }) => (
+const ModuleSelection = ({ modules, openDrawer: open }) => (
   <div
     id="module-selection"
-    className="w-2/3 px-6 py-4 bg-grey-light flex flex-wrap items-center"
+    className="flex-1 px-6 py-4 bg-grey-light flex flex-wrap items-center"
   >
     <div
       className="text-5xl font-light absolute"
@@ -29,6 +31,9 @@ const ModuleSelection = ({ modules }) => (
         image={module.get('image')}
         tags={module.get('tags')}
         incompatibilities={module.get('incompatibilities')}
+        onClick={() => {
+          open('IncompatibilityDrawer');
+        }}
       />
     ))}
   </div>
@@ -56,4 +61,4 @@ export default connect((state, { moduleId, levelId }) => {
       ).length === 0);
   // filter components with incompatibilities
   return { modules: filteredComponents.toArray() };
-})(ModuleSelection);
+}, { openDrawer })(ModuleSelection);

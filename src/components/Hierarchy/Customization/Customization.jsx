@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import * as hierarchyActions from 'actions/hierarchy';
 import * as componentActions from 'actions/components';
+import * as drawerActions from 'actions/drawers';
 import CustomizationTags from './CustomizationTags';
 import Incompatibilities from './Incompatibilities';
 
@@ -14,6 +15,7 @@ const propTypes = {
   mode: PropTypes.string.isRequired,
   updateCurrentPath: PropTypes.func.isRequired,
   setCurrentId: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
 };
@@ -31,6 +33,7 @@ const Customization = ({
   mode,
   updateCurrentPath,
   setCurrentId,
+  openDrawer,
 }) => (
   <div
     role="button"
@@ -40,14 +43,18 @@ const Customization = ({
       'Customization--disabled': disabled,
     })}
     style={{ minHeight: '12rem', minWidth: '12rem' }}
-    onClick={() =>
-      (mode === 'view'
-        ? updateCurrentPath({
+    onClick={() => {
+      if (disabled) return null;
+      if (mode === 'view') {
+        return updateCurrentPath({
           customizationId: customization.get('id'),
           order,
-        })
-        : setCurrentId(customization.get('id')))
-    }
+        });
+      }
+      openDrawer('ComponentDrawer');
+      return setCurrentId(customization.get('id'));
+    }}
+    disabled={disabled}
   >
     {customization.get('image') ? (
       <img
@@ -70,4 +77,8 @@ const Customization = ({
 Customization.propTypes = propTypes;
 Customization.defaultProps = defaultProps;
 
-export default connect(null, { ...hierarchyActions, ...componentActions })(Customization);
+export default connect(null, {
+  ...hierarchyActions,
+  ...componentActions,
+  ...drawerActions,
+})(Customization);

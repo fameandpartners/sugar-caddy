@@ -9,7 +9,7 @@ const propTypes = {
 };
 
 const CurrentModule = ({ module }) => (
-  <div id="current-module" className="w-1/3 flex justify-center items-center p-4">
+  <div id="current-module" className="flex justify-center items-center px-6 py-4">
     <Module
       id={module.get('id')}
       key={module.get('id')}

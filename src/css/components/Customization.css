@@ -3,7 +3,7 @@
 }
 
 .Customization--selected {
-  @apply .border-2 .border-blue;
+  @apply .border-4 .border-black;
 }
 
 .Customization--disabled {

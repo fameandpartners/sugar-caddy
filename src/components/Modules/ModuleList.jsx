@@ -4,13 +4,15 @@ import Immutable from 'immutable';
 import Module from 'components/common/Module';
 import { connect } from 'react-redux';
 import { setCurrentId } from 'actions/components';
+import { openDrawer } from 'actions/drawers';
 
 const propTypes = {
   components: PropTypes.instanceOf(Immutable.Map).isRequired,
   setCurrentComponent: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
-const ModuleList = ({ components, setCurrentComponent }) => (
+const ModuleList = ({ components, setCurrentComponent, openDrawer: open }) => (
   <div id="module-list" className="flex flex-wrap justify-center my-8">
     {components
       .toList()
@@ -22,7 +24,10 @@ const ModuleList = ({ components, setCurrentComponent }) => (
           order={0}
           name={custom.get('name')}
           image={custom.get('image')}
-          onClick={() => setCurrentComponent(custom.get('id'))}
+          onClick={() => {
+            open('ComponentDrawer');
+            setCurrentComponent(custom.get('id'));
+          }}
           tags={custom.get('tags')}
           incompatibilities={custom.get('incompatibilities')}
         />
@@ -34,5 +39,5 @@ ModuleList.propTypes = propTypes;
 
 export default connect(
   state => ({ components: state.components.get('data') }),
-  { setCurrentComponent: setCurrentId },
+  { setCurrentComponent: setCurrentId, openDrawer },
 )(ModuleList);

@@ -42,16 +42,16 @@ export default function components(state = initialState, { type, payload }) {
     });
   case UPDATE_COMPONENT_SUCCESS: {
     const { componentId, update } = payload;
-    return state.mergeIn(['data', componentId], fromJS(update));
+    return state.mergeIn(['data', componentId], fromJS(update)).set('loading', false);
   }
   case ADD_COMPONENT_SUCCESS: {
-    return state.setIn(['data', payload.id], fromJS(payload));
+    return state.setIn(['data', payload.id], fromJS(payload)).set('loading', false);
   }
   case SET_CURRENT_COMPONENT:
     return state.set('currentId', payload);
   case DELETE_COMPONENT_SUCCESS:
     return state.update('data', value =>
-      value.filter((_, key) => key !== payload));
+      value.filter((_, key) => key !== payload)).set('loading', false);
   default:
     return state;
   }
